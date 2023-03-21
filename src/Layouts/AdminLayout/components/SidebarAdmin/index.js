@@ -17,6 +17,11 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { styled, useTheme } from "@mui/material/styles";
+import CategoryIcon from "@mui/icons-material/Category";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import { Link } from "@mui/material";
 
 function SidebarAdmin({ open, handleDrawerClose }) {
   const drawerWidth = 240;
@@ -80,8 +85,12 @@ function SidebarAdmin({ open, handleDrawerClose }) {
       </DrawerHeader>
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: "block" }}>
+        <Link
+          href="/admin/categorymanagement"
+          underline="none"
+          sx={{ color: "#000" }}
+        >
+          <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
               sx={{
                 minHeight: 48,
@@ -96,12 +105,105 @@ function SidebarAdmin({ open, handleDrawerClose }) {
                   justifyContent: "center",
                 }}
               >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                <CategoryIcon />
               </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+              <ListItemText
+                sx={{
+                  opacity: open ? 1 : 0,
+                }}
+              >
+                Category Management
+              </ListItemText>
             </ListItemButton>
           </ListItem>
-        ))}
+        </Link>
+        <Link
+          href="/admin/authormanagement"
+          underline="none"
+          sx={{ color: "#000" }}
+        >
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <AssignmentIndIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={"Author Management"}
+                sx={{ opacity: open ? 1 : 0 }}
+              />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+        <Link
+          href="/admin/bookmanagement"
+          underline="none"
+          sx={{ color: "#000" }}
+        >
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <AutoStoriesIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={"Book management"}
+                sx={{ opacity: open ? 1 : 0 }}
+              />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+        <Link
+          href="/admin/accountmanagement"
+          underline="none"
+          sx={{ color: "#000" }}
+        >
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <ManageAccountsIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={"Account management"}
+                sx={{ opacity: open ? 1 : 0 }}
+              />
+            </ListItemButton>
+          </ListItem>
+        </Link>
       </List>
       <Divider />
       <List>

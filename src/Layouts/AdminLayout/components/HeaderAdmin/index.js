@@ -8,6 +8,7 @@ import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
@@ -15,6 +16,7 @@ import { styled } from "@mui/material/styles";
 import MenuAdmin from "../MenuAdmin";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { Link } from "@mui/material";
 
 const CustomizedAppBar = styled(AppBar)`
   background-color: white;
@@ -47,8 +49,6 @@ function HeaderAdmin({ handleDrawerOpen, open }) {
   };
 
   const handleLogOut = async () => {
-    console.log("current", currentUser);
-    console.log("token", currentUser.accessToken);
     await axios.post(`http://localhost:3001/auth/logout`, currentUser._id, {
       headers: { token: `${currentUser.accessToken}` },
     });
@@ -95,7 +95,7 @@ function HeaderAdmin({ handleDrawerOpen, open }) {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem>
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -106,6 +106,18 @@ function HeaderAdmin({ handleDrawerOpen, open }) {
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
+      </MenuItem>
+      <MenuItem onClick={handleLogOut}>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <LogoutIcon />
+        </IconButton>
+        <p>Log out</p>
       </MenuItem>
     </MenuAdmin>
   );
@@ -135,14 +147,16 @@ function HeaderAdmin({ handleDrawerOpen, open }) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
-            ADMIN PAGE
-          </Typography>
+          <Link href="/admin" underline="none">
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ display: { xs: "none", sm: "block" } }}
+            >
+              ADMIN PAGE
+            </Typography>
+          </Link>
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>

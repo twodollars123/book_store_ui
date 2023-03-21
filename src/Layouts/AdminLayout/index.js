@@ -17,14 +17,16 @@ function AdminLayout({ children }) {
   };
   return (
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", width: "100%" }}>
         <HeaderAdmin handleDrawerOpen={handleDrawerOpen} open={open} />
         <SidebarAdmin
           open={open}
           handleDrawerClose={handleDrawerClose}
           handleDrawerOpen={handleDrawerOpen}
         />
-        <Box sx={{ flexGrow: 1, marginTop: 10, marginLeft: 4 }}>{children}</Box>
+        <Grid container sx={{ flexGrow: 1, marginTop: 10, marginLeft: 4 }}>
+          {children}
+        </Grid>
       </Box>
     </Grid>
   );
