@@ -1,32 +1,46 @@
 import { Link } from "react-router-dom";
 import { Container } from "reactstrap";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
+import { logoutUser } from "../../../store/apiRequest";
 import logo from "../../../assets/images/logo.png";
 import catAvartar from "../../../assets/images/cat.jpg";
 import "./Header.scss";
 import Menu from "../../../Components/Menu";
 import Navi from "../Navi";
+import Wrapper from "../../../Components/Menu/Wrapper";
+import MenuItem from "../../../Components/Menu/MenuItem/MenuItem";
+import Button from "../../../Components/Button";
 
 function Header() {
-  const [isLogin, setIsLogin] = useState(false);
   const data = [];
   const cartItem =
     data && data.length > 0 ? data : [{ name: "Chưa có sản phẩm nào" }];
 
   //test
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
-  // if (currentUser) {
-  //   setIsLogin(true);
-  // }
-  useEffect(() => {
-    if (currentUser) {
-      setIsLogin(true);
-    }
-  }, [currentUser]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  console.log("currentUser", currentUser);
+  const handleLogout = async () => {
+    await logoutUser(
+      currentUser.accessToken,
+      dispatch,
+      navigate,
+      currentUser._id
+    );
+    localStorage.clear();
+    window.location.href = "/loggin";
+  };
+
+  const renderMenuUser = () => {
+    return (
+      <Wrapper>
+        <MenuItem label="Log out" onClick={handleLogout} />
+      </Wrapper>
+    );
+  };
 
   return (
     <div className="header__container">
@@ -38,58 +52,35 @@ function Header() {
         <Navi />
 
         <div className="header__action">
-          {isLogin ? (
-            //   {(currentUser.isadmin) ? (<Menu dataItemMenu={[{ name: "Setting" }, { name: "Logout" }]}>
-            //   <span className="avartar__user">
-            //     <img src={catAvartar} alt="avatar" />
-            //   </span>
-            // </Menu>) : (<Menu dataItemMenu={[{ name: "Setting" }, { name: "Logout" }]}>
-            //   <span className="avartar__user">
-            //     <img src={catAvartar} alt="avatar" />
-            //   </span>
-            // </Menu>)}
+          {/* {currentUser ? (
             currentUser.isadmin ? (
-              <Menu
-                titleHeader={`Hi, ${currentUser.username}`}
-                dataItemMenu={[
-                  { name: "Account manage", to: "/accountmanagerment" },
-                  { name: "Setting", to: "/setting" },
-                  { name: "Logout", to: "/logout" },
-                ]}
-              >
+              <Menu>
                 <span className="avartar__user">
                   <img src={catAvartar} alt="avatar" />
                 </span>
               </Menu>
             ) : (
-              <Menu
-                titleHeader={`Hi, ${currentUser.username}`}
-                dataItemMenu={[{ name: "Setting" }, { name: "Logout" }]}
-              >
+              <Menu renderResult={renderMenuUser}>
                 <span className="avartar__user">
                   <img src={catAvartar} alt="avatar" />
                 </span>
               </Menu>
             )
           ) : (
-            <Menu
-              dataItemMenu={[
-                { name: "Loggin", to: "/loggin" },
-                { name: "Sign up", to: "/signup" },
-              ]}
-            >
+            <Menu>
               <i className="fa fa-user-o icon" />
             </Menu>
-          )}
-          <Menu
-            titleHeader="Giỏ hàng"
-            // dataItemMenu={[{ name: "item1" }, { name: "item2" }]}
-            dataItemMenu={cartItem}
-          >
-            <Link to="/giohang" className="cart__toggle">
-              <i className="fa fa-shopping-bag icon" />
-            </Link>
-          </Menu>
+          )} */}
+          {/* <Menu> */}
+          {/* <Link to="/giohang" className="cart__toggle"> */}
+          <Button
+            to="/cart"
+            leftIcon={<i className="fa fa-shopping-bag " />}
+            badge
+            countBadge={10}
+          ></Button>
+          {/* </Link> */}
+          {/* </Menu> */}
         </div>
       </Container>
     </div>

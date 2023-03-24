@@ -30,7 +30,7 @@ export const loginUser = async (user, dispatch, navigate) => {
     }
   } catch (error) {
     dispatch(loginFailed());
-    toast.error(`Error: ${error}`, {
+    toast.error(`Error: wrong username or password`, {
       position: toast.POSITION.TOP_RIGHT,
     });
   }
@@ -59,5 +59,18 @@ export const getAllUsers = async (accessToken, dispatch) => {
     dispatch(getAllUsersSuccess(res.data));
   } catch (error) {
     dispatch(getAllUsersFalure());
+  }
+};
+
+export const logoutUser = async (accessToken, dispatch, navigate, id) => {
+  dispatch(loginStart());
+  try {
+    await axios.post(`http://localhost:3001/auth/logout/`, id, {
+      headers: { token: accessToken },
+    });
+    dispatch(loginSuccess());
+    navigate("/");
+  } catch (error) {
+    dispatch(loginFailed());
   }
 };
