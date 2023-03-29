@@ -11,6 +11,7 @@ function Button({
   rightIcon,
   badge,
   countBadge = 0,
+  itemMenu,
   onClick,
   ...passProps
 }) {
@@ -33,7 +34,8 @@ function Button({
   //tạm thời thì nếu có thêm className thì vào Button.sccs viết class đó
   const classes = {
     [className]: className,
-    badge: badge ? "badge" : "",
+    badge: badge ? "btn__badge" : "",
+    itemMenu: itemMenu ? "btn__item-menu" : "",
   };
 
   //nếu counntBadge lớn hơn 99 thì hiển thị 99+
@@ -43,7 +45,11 @@ function Button({
 
   return (
     <Comp
-      className={`button__wrapper ${classes.badge} ${classes?.[className]}`}
+      className={
+        itemMenu
+          ? `${classes.itemMenu}`
+          : `button__wrapper ${classes.badge}  ${classes?.[className]}`
+      }
       {...props}
     >
       {leftIcon && <span className="button__icon">{leftIcon}</span>}

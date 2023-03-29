@@ -6,7 +6,7 @@ import "./Menu.scss";
 function MenuItem({ data, onClick }) {
   return (
     //render Buttom custom
-    <Button leftIcon={data.icon} to={data.to} onClick={onClick}>
+    <Button leftIcon={data.icon} to={data.to} onClick={onClick} itemMenu>
       {data.label}
     </Button>
   );

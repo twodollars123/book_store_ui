@@ -8,7 +8,12 @@ import MenuItem from "./MenuItem";
 // sử dụng onChange ở dưới mà nếu không truyền hàm từ cha thì sẽ báo lỗi nên phải định nghĩa 1 hàm rỗng làm mặc định
 const defaultFn = () => {};
 
-function Menu({ children, items = [], onChange = defaultFn }) {
+function Menu({
+  children,
+  items = [],
+  onChange = defaultFn,
+  interactive = false,
+}) {
   // lữu chữ dữ liệu
   const [menuPages, setMenuPages] = useState([{ data: items }]);
   console.log("menu pages: ", menuPages);
@@ -18,7 +23,8 @@ function Menu({ children, items = [], onChange = defaultFn }) {
   // hàm sử lý logic onclick item menu
   const handleOnclickItemMenu = (item) => {
     //tạo biến điều kiện xác định item có data children không
-    const isParent = !!item.children; // dùng !! vì nó sẽ luôn luôn trả về boolean nên sẽ không bị lỗi isParent trả về underfine
+    const isParent = !!item.children;
+    // dùng !! vì nó sẽ luôn luôn trả về boolean nên sẽ không bị lỗi isParent trả về underfine
     //cần làm những gì
     //nếu có isparent === true thì đẩy data children vào menuPages
     if (isParent) {
@@ -38,14 +44,14 @@ function Menu({ children, items = [], onChange = defaultFn }) {
         <MenuItem
           key={index}
           data={item}
-          onClick={handleOnclickItemMenu(item)}
+          onClick={() => handleOnclickItemMenu(item)}
         />
       );
     });
   };
   return (
     <Tippy
-      interactive
+      interactive={interactive}
       delay={[100, 100]}
       offset={[40, 4]}
       placement="bottom-end"

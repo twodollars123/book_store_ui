@@ -66,8 +66,35 @@
 // áp dụng cho từng thiết kế thêm sau
 
 //options type button
-.badge {
+.btn__badge {
   position: relative;
 }
 
+.btn__item-menu {
+  display: inline-flex;
+  justify-content: flex-start;
+  min-width: 50px;
+  max-height: 46px;
+  min-height: 46px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: var(--text-color);
+  overflow: hidden;
+  object-fit: cover;
+  cursor: pointer;
+  transition: ease-in 0.2s;
+  &:hover {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    background-color: var(--dark-blue);
+    color: var(--white);
+  }
+
+  &:last-child {
+    margin-bottom: 8px;
+  }
+}
 //options size button
