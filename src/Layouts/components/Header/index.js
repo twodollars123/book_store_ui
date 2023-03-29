@@ -7,22 +7,42 @@ import { logoutUser } from "../../../store/apiRequest";
 import logo from "../../../assets/images/logo.png";
 import catAvartar from "../../../assets/images/cat.jpg";
 import "./Header.scss";
-import Menu from "../../../Components/Menu";
+
 import Navi from "../Navi";
-import Wrapper from "../../../Components/Menu/Wrapper";
-import MenuItem from "../../../Components/Menu/MenuItem/MenuItem";
 import Button from "../../../Components/Button";
+import Menu from "../../../Components/Popper/Menu";
 
 function Header() {
   const data = [];
   const cartItem =
-    data && data.length > 0 ? data : [{ name: "Chưa có sản phẩm nào" }];
+    data && data.length > 0 ? data : [{ label: "Chưa có sản phẩm nào" }];
 
   //test
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  //data menu user
+  const DATA_MENU_ITEMS_USER = [
+    {
+      label: "My Profile",
+      to: "/getme",
+    },
+    {
+      label: "Log out",
+    },
+  ];
+
+  // data menu user khi chưa đăng nhâp
+  const DATA_MENU_ITEMS_USER_NOT_LOGGED_IN = [
+    { label: "Log in", to: "/loggin" },
+    {
+      label: "Sign up",
+      to: "/signup",
+    },
+  ];
+
+  //handle logout
   const handleLogout = async () => {
     await logoutUser(
       currentUser.accessToken,
@@ -34,11 +54,23 @@ function Header() {
     window.location.href = "/loggin";
   };
 
-  const renderMenuUser = () => {
-    return (
-      <Wrapper>
-        <MenuItem label="Log out" onClick={handleLogout} />
-      </Wrapper>
+  // hàm render header action sau khi đăng nhâp thành công
+  const renderHeaderActionSignedUp = () => {
+    //biến đk xác định có là admin hay k
+    const isAdmin = !!currentUser.isadmin;
+    console.log("is admin", isAdmin);
+    return isAdmin ? (
+      <Menu items={DATA_MENU_ITEMS_USER}>
+        <span className="avartar__user">
+          <img src={catAvartar} alt="avatar" />
+        </span>
+      </Menu>
+    ) : (
+      <Menu items={DATA_MENU_ITEMS_USER}>
+        <span className="avartar__user">
+          <img src={catAvartar} alt="avatar" />
+        </span>
+      </Menu>
     );
   };
 
@@ -52,35 +84,26 @@ function Header() {
         <Navi />
 
         <div className="header__action">
-          {/* {currentUser ? (
-            currentUser.isadmin ? (
-              <Menu>
-                <span className="avartar__user">
-                  <img src={catAvartar} alt="avatar" />
-                </span>
-              </Menu>
-            ) : (
-              <Menu renderResult={renderMenuUser}>
-                <span className="avartar__user">
-                  <img src={catAvartar} alt="avatar" />
-                </span>
-              </Menu>
-            )
+          {currentUser ? (
+            renderHeaderActionSignedUp()
           ) : (
-            <Menu>
-              <i className="fa fa-user-o icon" />
+            <Menu items={DATA_MENU_ITEMS_USER_NOT_LOGGED_IN}>
+              <div>
+                <Button to="/cart" leftIcon={<i className="fa fa-user-o " />} />
+              </div>
             </Menu>
-          )} */}
-          {/* <Menu> */}
-          {/* <Link to="/giohang" className="cart__toggle"> */}
-          <Button
-            to="/cart"
-            leftIcon={<i className="fa fa-shopping-bag " />}
-            badge
-            countBadge={10}
-          ></Button>
-          {/* </Link> */}
-          {/* </Menu> */}
+          )}
+
+          <Menu items={cartItem}>
+            <span>
+              <Button
+                to="/cart"
+                leftIcon={<i className="fa fa-shopping-bag " />}
+                badge
+                countBadge={10}
+              ></Button>
+            </span>
+          </Menu>
         </div>
       </Container>
     </div>
