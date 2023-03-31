@@ -16,6 +16,16 @@
   align-items: center;
 }
 
+.header__hide {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  flex-grow: 1;
+  max-width: 60%;
+  margin-right: 20px;
+}
+
 .logo--link {
   height: 100%;
   img {

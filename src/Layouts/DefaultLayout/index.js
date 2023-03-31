@@ -6,6 +6,7 @@ function DefaultLayout({ children }) {
   return (
     <div className="defaultlayout__container">
       <Header />
+
       <div className="defaulayout__main--content">{children}</div>
       <Footer />
     </div>

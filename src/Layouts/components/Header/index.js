@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Container } from "reactstrap";
+import { Container, Row } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -8,9 +8,10 @@ import logo from "../../../assets/images/logo.png";
 import catAvartar from "../../../assets/images/cat.jpg";
 import "./Header.scss";
 
-import Navi from "../Navi";
 import Button from "../../../Components/Button";
 import Menu from "../../../Components/Popper/Menu";
+import Navi from "../Navi";
+import Search from "../Search";
 
 function Header() {
   const data = [];
@@ -103,11 +104,18 @@ function Header() {
   return (
     <div className="header__container">
       <Container fluid="md" className="header__inner">
-        <Link to="/" className="logo--link">
-          <img src={logo} alt="logo" />
-        </Link>
+        <div className="header__hide">
+          <Link to="/" className="logo--link d-none d-sm-block">
+            <img src={logo} alt="logo" />
+          </Link>
 
-        <Navi />
+          <Row className="d-none d-sm-block">
+            <Navi />
+          </Row>
+        </div>
+
+        {/* search */}
+        <Search />
 
         <div className="header__action">
           {currentUser ? (
