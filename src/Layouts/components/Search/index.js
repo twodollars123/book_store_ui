@@ -1,18 +1,64 @@
 import Tippy from "@tippyjs/react/headless";
+import { Link } from "react-router-dom";
 
 import "./Search.scss";
 import { Wrapper as PopperWrapper } from "../../../Components/Popper";
+import SearchResultItem from "./SearchResultItem";
+import { useEffect, useRef, useState } from "react";
+import { search } from "../../../ApiServices/searchApi";
 
 function Search() {
+  const [inputSearchValue, setInputSearchValue] = useState("");
+  const [showResultSearch, setShowResultSearch] = useState(false);
+  const [resultSearch, setResultSearch] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const inputRef = useRef();
+
+  const fetchApi = async (q, limit, type) => {
+    const res = await search(q, limit, type);
+    console.log(!!res);
+    if (!!res) {
+      console.log("a", res.data);
+      setResultSearch(res.data);
+      setIsLoading(false);
+    } else {
+      console.log("b");
+      setResultSearch([]);
+    }
+  };
+
+  useEffect(() => {
+    if (inputSearchValue.length > 0) {
+      console.log("a");
+      setIsLoading(true);
+      try {
+        fetchApi(inputSearchValue);
+      } catch (error) {
+        setResultSearch([]);
+        setIsLoading(false);
+      }
+    }
+  }, [inputSearchValue]);
+
   return (
     <Tippy
+      visible={inputSearchValue.trim().length > 0 && showResultSearch}
       interactive
+      onClickOutside={() => setShowResultSearch(false)}
       render={(attrs) => (
         <div className="box__search--result" tabIndex="-1" {...attrs}>
           <PopperWrapper>
-            <span>Có phải bạn muốn tìm kiếms</span>
-            <span>a</span>
-            <span>b</span>
+            <Link className="search__book-result">
+              {`Có phải bạn muốn tìm kiếm tên sách "${inputSearchValue}"?`}
+            </Link>
+            {!!resultSearch && resultSearch.length > 0 ? (
+              resultSearch.map((item) => {
+                return <SearchResultItem key={item._id} data={item} />;
+              })
+            ) : (
+              <span className="search__result--item">{`Not found the books or authors are called name "${inputSearchValue}" yet!`}</span>
+            )}
           </PopperWrapper>
         </div>
       )}
@@ -21,11 +67,27 @@ function Search() {
         <input
           placeholder="enter name of books or authors"
           className="search__input"
+          spellCheck={false}
+          value={inputSearchValue}
+          onChange={(e) => {
+            setInputSearchValue(e.target.value);
+          }}
+          onFocus={() => setShowResultSearch(true)}
+          ref={inputRef}
         />
-        <button className="search__btn--clear">
-          <i className="fa fa-close" />
-        </button>
-        {/* <i className="fa fa-spinner search__spinner--loading" /> */}
+        {!!inputSearchValue && !isLoading && (
+          <button
+            className="search__btn--clear"
+            onClick={() => {
+              setInputSearchValue("");
+              setResultSearch([]);
+              inputRef.current.focus();
+            }}
+          >
+            <i className="fa fa-close" />
+          </button>
+        )}
+        {isLoading && <i className="fa fa-spinner search__spinner--loading" />}
         <button className="search__btn--search">
           <i className="fa fa-search" />
         </button>
