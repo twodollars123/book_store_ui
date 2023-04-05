@@ -16,7 +16,6 @@ function Menu({
 }) {
   // lữu chữ dữ liệu
   const [menuPages, setMenuPages] = useState([{ data: items }]);
-  console.log("menu pages: ", menuPages);
   // hiển thị phần tử cuối cùng của mảng
   const currentMenuPage = menuPages[menuPages.length - 1].data;
 
