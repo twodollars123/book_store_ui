@@ -15,8 +15,10 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { styled } from "@mui/material/styles";
 import MenuAdmin from "../MenuAdmin";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "@mui/material";
+import { logoutUser } from "../../../../store/apiRequest";
+import { useNavigate } from "react-router-dom";
 
 const CustomizedAppBar = styled(AppBar)`
   background-color: white;
@@ -30,6 +32,9 @@ function HeaderAdmin({ handleDrawerOpen, open }) {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -49,11 +54,7 @@ function HeaderAdmin({ handleDrawerOpen, open }) {
   };
 
   const handleLogOut = async () => {
-    await axios.post(`http://localhost:3001/auth/logout`, currentUser._id, {
-      headers: { token: `${currentUser.accessToken}` },
-    });
-    localStorage.clear();
-    window.location.href = "/loggin";
+    logoutUser(currentUser.accessToken, dispatch, navigate);
   };
 
   // const menuId = "primary-search-account-menu";

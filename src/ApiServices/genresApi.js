@@ -18,10 +18,10 @@ export const getAGenre = async (id) => {
   }
 };
 
-export const updateAGenre = async (id, payload) => {
+export const updateAGenre = async (id, payload, accessToken) => {
   try {
-    await axios.put(`http://localhost:3001/genre/:${id}`, payload, {
-      headers: { token: payload.accessToken },
+    await axios.put(`http://localhost:3001/genre/${id}`, payload, {
+      headers: { token: accessToken },
     });
   } catch (error) {
     console.log("update a genre", error);
@@ -30,7 +30,7 @@ export const updateAGenre = async (id, payload) => {
 
 export const deleteAGenre = async (id, payload) => {
   try {
-    await axios.delete(`http://localhost:3001/genre/:${id}`, {
+    await axios.delete(`http://localhost:3001/genre/${id}`, {
       headers: { token: payload.accessToken },
     });
   } catch (error) {

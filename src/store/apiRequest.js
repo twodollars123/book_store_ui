@@ -14,6 +14,7 @@ import {
   getAllUsersStart,
   getAllUsersSuccess,
 } from "./userSlice";
+import { persistor } from "./index";
 
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
@@ -62,14 +63,19 @@ export const getAllUsers = async (accessToken, dispatch) => {
   }
 };
 
-export const logoutUser = async (accessToken, dispatch, navigate, id) => {
+export const logoutUser = async (accessToken, dispatch, navigate) => {
   dispatch(loginStart());
   try {
-    await axios.post(`http://localhost:3001/auth/logout/`, id, {
-      headers: { token: accessToken },
-    });
+    await axios.post(
+      `http://localhost:3001/auth/logout`,
+      {},
+      {
+        headers: { token: accessToken },
+      }
+    );
     dispatch(loginSuccess());
-    navigate("/");
+    persistor.purge();
+    navigate("/loggin");
   } catch (error) {
     dispatch(loginFailed());
   }

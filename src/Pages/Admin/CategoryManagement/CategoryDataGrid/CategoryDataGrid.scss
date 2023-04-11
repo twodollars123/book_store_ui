@@ -1,0 +1,56 @@
+// create and edit modal
+
+.content__create__container {
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+  min-height: 100px;
+}
+
+.content__create__inputgroup {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.content__create__label--name {
+  min-width: 20%;
+  color: var(--text-color);
+}
+
+.content__create__input--name {
+  min-height: 40px;
+  flex: 1;
+  padding: 0 8px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  &:focus {
+    border-color: #40aad9;
+  }
+}
+
+.error--nameinput {
+  min-height: 40px;
+  flex: 1;
+  padding: 0 8px;
+  border: 1px solid #ff3333;
+  border-radius: 4px;
+  &:focus {
+    border-color: #40aad9;
+  }
+}
+
+.name__error {
+  color: #ff3333;
+}
+
+.success--nameinput {
+  min-height: 40px;
+  flex: 1;
+  padding: 0 8px;
+  border: 1px solid #5cb85c;
+  border-radius: 4px;
+  &:focus {
+    border-color: #5cb85c;
+  }
+}

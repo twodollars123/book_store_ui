@@ -1,7 +1,7 @@
 import { Fab, Grid, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-function BannerTilte({ titlePage, btnCreate }) {
+function BannerTilte({ titlePage, btnCreate, onClick }) {
   return (
     <Grid
       container
@@ -37,6 +37,7 @@ function BannerTilte({ titlePage, btnCreate }) {
             right: { sm: "10px", md: "20px" },
             marginLeft: { xs: "60%", sm: "80%", md: "0" },
           }}
+          onClick={onClick}
         >
           <AddIcon />
         </Fab>

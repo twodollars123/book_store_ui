@@ -50,15 +50,10 @@ function Header() {
   ];
 
   //handle logout
-  const handleLogout = async () => {
-    await logoutUser(
-      currentUser.accessToken,
-      dispatch,
-      navigate,
-      currentUser._id
-    );
-    localStorage.clear();
-    window.location.href = "/loggin";
+  const handleLogout = () => {
+    logoutUser(currentUser.accessToken, dispatch, navigate);
+    // localStorage.clear();
+    // window.location.href = "/loggin";
   };
 
   //sử lý sự kiện cho nút có chức năng fn
