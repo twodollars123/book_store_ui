@@ -67,6 +67,7 @@ function CategoryManagement() {
         handleClose={handleCloseCategoryDialog}
         dataGenre={dataGenres}
         dataUserCurrent={currentUser}
+        setDataGenres={setDataGenres}
       />
     </Grid>
   );

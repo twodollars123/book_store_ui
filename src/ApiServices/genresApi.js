@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const getAllGenres = async () => {
   try {
@@ -15,6 +16,27 @@ export const getAGenre = async (id) => {
     return res.data;
   } catch (error) {
     console.log("get a genre", error);
+  }
+};
+
+export const creareAGenre = async (payload, token) => {
+  try {
+    const res = await axios.post(`http://localhost:3001/genre/`, payload, {
+      headers: { token: token },
+    });
+
+    toast.success("Create a new genre is successfull!", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
+    return res.data;
+  } catch (error) {
+    console.log("error create a genre");
   }
 };
 

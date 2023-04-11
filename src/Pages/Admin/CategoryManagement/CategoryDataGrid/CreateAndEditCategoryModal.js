@@ -9,6 +9,10 @@ import Paper from "@mui/material/Paper";
 import Draggable from "react-draggable";
 
 import "./CategoryDataGrid.scss";
+import MultiSelect from "../../../../Components/MultiSelect";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { creareAGenre } from "../../../../ApiServices/genresApi";
 
 function PaperComponent(props) {
   return (
@@ -26,13 +30,16 @@ const RenderCreateCategory = ({
   dataGenre,
   dataUserCurrent,
   setValidateSuccess,
+  nameInputValue,
+  setNameInputValue,
+  parentGenre,
+  setParentGenre,
 }) => {
-  const [nameInputValue, setNameInputValue] = React.useState("");
   const nameInputRef = React.useRef();
   const nameSpanRef = React.useRef();
 
   const validate = () => {
-    if (!nameInputValue) {
+    if (!nameInputValue.trim()) {
       nameInputRef.current.className = "error--nameinput";
       nameSpanRef.current.textContent =
         "Do not leave the name of genre field blank";
@@ -51,6 +58,20 @@ const RenderCreateCategory = ({
     }
   };
 
+  const genreOptions =
+    dataGenre &&
+    dataGenre.length > 0 &&
+    dataGenre.map((obj) => {
+      return { label: obj.name, value: obj._id };
+    });
+
+  const handleChangeSelect = (selected) => {
+    const parentIdArr = selected.map((item) => {
+      return item.value;
+    });
+    setParentGenre(parentIdArr);
+  };
+
   return (
     <div className="content__create__container">
       <span className="content__create__inputgroup">
@@ -65,6 +86,12 @@ const RenderCreateCategory = ({
         />
       </span>
       <span ref={nameSpanRef} className="name__error"></span>
+      <span className="content__create__inputgroup">
+        <label className="content__create__label--name">Parent's genre: </label>
+        <div className="content__crate__multiselect">
+          <MultiSelect options={genreOptions} onChange={handleChangeSelect} />
+        </div>
+      </span>
     </div>
   );
 };
@@ -78,11 +105,42 @@ export default function DraggableDialog({
   update = false,
   dataGenre,
   dataUserCurrent,
+  setDataGenres,
 }) {
   const [validateSuccess, setValidateSuccess] = React.useState(false);
-  const handleSubmit = () => {
+  const [nameInputValue, setNameInputValue] = React.useState("");
+  const [parentGenre, setParentGenre] = React.useState([]);
+  const handleSubmit = async () => {
     if (validateSuccess) {
+      const payload = {
+        name: nameInputValue,
+        url: `/genre/${nameInputValue.toLowerCase()}`,
+        genreParentId: parentGenre.length > 0 ? parentGenre : null,
+        createdBy: dataUserCurrent._id,
+      };
+      const token = dataUserCurrent.accessToken;
+      console.log("payload", payload);
+      const result = await creareAGenre(payload, token);
+      if (result) {
+        console.log("a", result);
+        const newDataGenres = [...dataGenre, result];
+        setDataGenres(newDataGenres);
+      }
+      setNameInputValue("");
+      setParentGenre("");
+      setValidateSuccess(false);
+
       handleClose();
+    } else {
+      toast.error("Name does not validate!", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
   return (
@@ -109,6 +167,10 @@ export default function DraggableDialog({
                 dataGenre={dataGenre}
                 dataUserCurrent={dataUserCurrent}
                 setValidateSuccess={setValidateSuccess}
+                nameInputValue={nameInputValue}
+                setNameInputValue={setNameInputValue}
+                parentGenre={parentGenre}
+                setParentGenre={setParentGenre}
               />
             )}
           </DialogContentText>

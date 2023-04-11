@@ -3,14 +3,18 @@
 .content__create__container {
   display: flex;
   flex-direction: column;
-  min-width: 400px;
-  min-height: 100px;
+  min-width: 560px;
+  min-height: 200px;
 }
 
 .content__create__inputgroup {
   display: flex;
   width: 100%;
   align-items: center;
+}
+
+.content__create__inputgroup ~ .content__create__inputgroup {
+  margin-top: 10px;
 }
 
 .content__create__label--name {
@@ -53,4 +57,9 @@
   &:focus {
     border-color: #5cb85c;
   }
+}
+
+//multiselect
+.content__crate__multiselect {
+  flex: 1;
 }
