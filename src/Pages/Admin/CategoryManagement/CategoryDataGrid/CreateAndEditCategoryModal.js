@@ -112,10 +112,11 @@ export default function DraggableDialog({
   const [parentGenre, setParentGenre] = React.useState([]);
   const handleSubmit = async () => {
     if (validateSuccess) {
+      const genreParentId = parentGenre.length > 0 ? parentGenre : null;
       const payload = {
         name: nameInputValue,
         url: `/genre/${nameInputValue.toLowerCase()}`,
-        genreParentId: parentGenre.length > 0 ? parentGenre : null,
+        genreParentId: genreParentId,
         createdBy: dataUserCurrent._id,
       };
       const token = dataUserCurrent.accessToken;

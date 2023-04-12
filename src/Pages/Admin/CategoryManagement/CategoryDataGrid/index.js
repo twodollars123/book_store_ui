@@ -54,12 +54,24 @@ export default function CategoryDataGrid({ rows, allUsers, currentUser }) {
               {rows &&
                 rows.length > 0 &&
                 rows.map((row, index) => {
+                  //log
                   console.log("roe", row);
                   // setIsCheck(row.active);
 
                   const createBy = allUsers.find(
                     (item) => item._id === row.createdBy
                   );
+                  // genreParentId là một mảng
+                  const parentGenre = rows.map((genre) => {
+                    if (!row.genreParentId) {
+                      return;
+                    }
+                    if (row.genreParentId.includes(genre._id)) {
+                      return genre.name;
+                    }
+                    return;
+                  });
+                  console.log("a", parentGenre);
                   return (
                     <TableRow
                       key={row.name}
@@ -67,7 +79,14 @@ export default function CategoryDataGrid({ rows, allUsers, currentUser }) {
                     >
                       <TableCell align="left">{index + 1}</TableCell>
                       <TableCell align="left">{row.name}</TableCell>
-                      <TableCell align="left">{row.genreParentId}</TableCell>
+                      <TableCell align="left">
+                        {parentGenre.map((genreParent) => {
+                          if (genreParent) {
+                            return genreParent + "   ";
+                          }
+                          return "";
+                        })}
+                      </TableCell>
                       <TableCell align="left">{row.books.length}</TableCell>
                       <TableCell align="left">
                         {createBy?.username || ""}
