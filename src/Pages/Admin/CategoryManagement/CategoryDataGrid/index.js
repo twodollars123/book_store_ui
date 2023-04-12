@@ -12,6 +12,8 @@ import Button from "../../../../Components/Button";
 import DraggableDialog from "./CreateAndEditCategoryModal";
 import { useState } from "react";
 
+import { default as DeleteModal } from "./ConfirmDeleteGenre";
+
 export default function CategoryDataGrid({
   rows,
   allUsers,
@@ -25,7 +27,23 @@ export default function CategoryDataGrid({
   };
 
   const [dataGenreUpdate, setDataGenreUpdate] = useState({});
+  const [dataGenreDelete, setDataGenreDelete] = useState();
   const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
+  const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState(false);
+
+  const handleOpenConfirmDeleteModal = () => {
+    setOpenConfirmDeleteModal(true);
+  };
+
+  const handleCloseConfirmDeleteModal = () => {
+    setOpenConfirmDeleteModal(false);
+  };
+
+  const hanldeDeleteGenre = (data) => {
+    const deletedGenre = data;
+    setDataGenreDelete(deletedGenre);
+    handleOpenConfirmDeleteModal();
+  };
 
   const handleEditgenre = (data) => {
     const dataGenre = data;
@@ -129,7 +147,10 @@ export default function CategoryDataGrid({
                           leftIcon={<i className="fa fa-edit" />}
                           onClick={() => handleEditgenre(row)}
                         />
-                        <Button leftIcon={<i className="fa fa-trash" />} />
+                        <Button
+                          leftIcon={<i className="fa fa-trash" />}
+                          onClick={() => hanldeDeleteGenre(row)}
+                        />
                       </TableCell>
                     </TableRow>
                   );
@@ -149,6 +170,14 @@ export default function CategoryDataGrid({
           dataGenreUpdate={dataGenreUpdate}
         />
       )}
+      <DeleteModal
+        open={openConfirmDeleteModal}
+        handleClose={handleCloseConfirmDeleteModal}
+        dataGenreDelete={dataGenreDelete}
+        currentUser={currentUser}
+        dataGenre={dataGenres}
+        setDataGenres={setDataGenres}
+      />
     </Box>
   );
 }

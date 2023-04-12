@@ -51,11 +51,16 @@ export const updateAGenre = async (id, payload, accessToken) => {
   }
 };
 
-export const deleteAGenre = async (id, payload) => {
+export const deleteAGenre = async (id, accessToken) => {
   try {
-    await axios.delete(`http://localhost:3001/genre/${id}`, {
-      headers: { token: payload.accessToken },
-    });
+    const res = await axios.delete(
+      `http://localhost:3001/genre/${id}`,
+      {},
+      {
+        headers: { token: accessToken },
+      }
+    );
+    return res.data;
   } catch (error) {
     console.log("delete a genre", error);
   }
