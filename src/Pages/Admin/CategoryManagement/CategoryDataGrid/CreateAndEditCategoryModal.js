@@ -10,9 +10,8 @@ import Draggable from "react-draggable";
 
 import "./CategoryDataGrid.scss";
 import MultiSelect from "../../../../Components/MultiSelect";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { creareAGenre } from "../../../../ApiServices/genresApi";
+import { creareAGenre, updateAGenre } from "../../../../ApiServices/genresApi";
 
 function PaperComponent(props) {
   return (
@@ -34,6 +33,7 @@ const RenderCreateCategory = ({
   setNameInputValue,
   parentGenre,
   setParentGenre,
+  dataGenreUpdate,
 }) => {
   const nameInputRef = React.useRef();
   const nameSpanRef = React.useRef();
@@ -69,9 +69,26 @@ const RenderCreateCategory = ({
     const parentIdArr = selected.map((item) => {
       return item.value;
     });
+
     setParentGenre(parentIdArr);
   };
 
+  //defaultvalue cũng nhận mảng object gồm label và value
+  let defaultValue;
+  if (dataGenreUpdate?.genreParentId) {
+    const optionsArr =
+      dataGenre &&
+      dataGenre.length > 0 &&
+      dataGenre.map((obj) => {
+        if (dataGenreUpdate?.genreParentId.includes(obj._id)) {
+          return { label: obj.name, value: obj._id };
+        }
+        return "";
+      });
+    if (optionsArr) {
+      defaultValue = optionsArr.filter((item) => typeof item !== "undefined");
+    }
+  }
   return (
     <div className="content__create__container">
       <span className="content__create__inputgroup">
@@ -80,23 +97,25 @@ const RenderCreateCategory = ({
           ref={nameInputRef}
           placeholder="The name of new genre"
           className="content__create__input--name"
-          defaultValue={update ? nameInputValue : ""}
+          defaultValue={update ? dataGenreUpdate.name : ""}
           onChange={(e) => setNameInputValue(e.target.value)}
-          onBlur={() => validate()}
+          onBlur={() => (update ? () => {} : validate())}
         />
       </span>
       <span ref={nameSpanRef} className="name__error"></span>
       <span className="content__create__inputgroup">
         <label className="content__create__label--name">Parent's genre: </label>
         <div className="content__crate__multiselect">
-          <MultiSelect options={genreOptions} onChange={handleChangeSelect} />
+          <MultiSelect
+            defaultValue={update ? defaultValue : ""}
+            options={genreOptions}
+            // value={defaultValue}
+            onChange={handleChangeSelect}
+          />
         </div>
       </span>
     </div>
   );
-};
-const RenderUpdateCategory = () => {
-  return <p>Update</p>;
 };
 
 export default function DraggableDialog({
@@ -106,6 +125,7 @@ export default function DraggableDialog({
   dataGenre,
   dataUserCurrent,
   setDataGenres,
+  dataGenreUpdate,
 }) {
   const [validateSuccess, setValidateSuccess] = React.useState(false);
   const [nameInputValue, setNameInputValue] = React.useState("");
@@ -120,10 +140,8 @@ export default function DraggableDialog({
         createdBy: dataUserCurrent._id,
       };
       const token = dataUserCurrent.accessToken;
-      console.log("payload", payload);
       const result = await creareAGenre(payload, token);
       if (result) {
-        console.log("a", result);
         const newDataGenres = [...dataGenre, result];
         setDataGenres(newDataGenres);
       }
@@ -144,11 +162,50 @@ export default function DraggableDialog({
       });
     }
   };
+
+  const handleUpdate = async () => {
+    // if (!nameInputValue && parentGenre.length <= 0) {
+    //   toast.error("Must change name!", {
+    //     position: toast.POSITION.TOP_RIGHT,
+    //     autoClose: 2000,
+    //     hideProgressBar: true,
+    //     closeOnClick: true,
+    //     pauseOnHover: false,
+    //     draggable: true,
+    //     progress: undefined,
+    //   });
+    //   return;
+    // } else {
+    let payload = {
+      updatedBy: dataUserCurrent._id,
+      genreParentId: parentGenre,
+    };
+    if (nameInputValue) {
+      payload = { ...payload, name: nameInputValue };
+    }
+    // if (parentGenre.length > 0) {
+    //   payload = { ...payload, genreParentId: parentGenre };
+    // }
+    const result = await updateAGenre(
+      dataGenreUpdate._id,
+      payload,
+      dataUserCurrent.accessToken
+    );
+    //tìm index trong dataGenre thay thế result vào vị trí index
+
+    if (result) {
+      const index = dataGenre.indexOf(
+        dataGenre.find((item) => item._id === result._id)
+      );
+      const newDataGenres = [...dataGenre];
+      newDataGenres.splice(index, 1, result);
+      setDataGenres(newDataGenres);
+    }
+    handleClose();
+    // }
+  };
   return (
     <div>
-      {/* <Button variant="outlined" onClick={handleClickOpen}>
-        Open draggable dialog
-      </Button> */}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -161,26 +218,26 @@ export default function DraggableDialog({
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {update ? (
-              <RenderUpdateCategory />
-            ) : (
-              <RenderCreateCategory
-                dataGenre={dataGenre}
-                dataUserCurrent={dataUserCurrent}
-                setValidateSuccess={setValidateSuccess}
-                nameInputValue={nameInputValue}
-                setNameInputValue={setNameInputValue}
-                parentGenre={parentGenre}
-                setParentGenre={setParentGenre}
-              />
-            )}
+            <RenderCreateCategory
+              dataGenre={dataGenre}
+              dataUserCurrent={dataUserCurrent}
+              setValidateSuccess={setValidateSuccess}
+              nameInputValue={nameInputValue}
+              setNameInputValue={setNameInputValue}
+              parentGenre={parentGenre}
+              setParentGenre={setParentGenre}
+              dataGenreUpdate={dataGenreUpdate}
+              update={update}
+            />
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit}>{update ? "Update" : "Create"}</Button>
+          <Button onClick={update ? handleUpdate : handleSubmit}>
+            {update ? "Update" : "Create"}
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

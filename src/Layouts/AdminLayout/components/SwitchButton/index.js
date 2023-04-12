@@ -2,7 +2,6 @@ import "./SwitchButton.scss";
 
 function SwitchButton({ id_togglebtn, isCheck, onClick }) {
   //   const clases = isCheck ? "toggleActiveBtn" : "toggleActiveBtn toggleActive";
-  console.log("check", isCheck);
   return (
     <label className="toggleActiveBtn" htmlFor={id_togglebtn}>
       <input

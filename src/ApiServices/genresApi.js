@@ -42,9 +42,10 @@ export const creareAGenre = async (payload, token) => {
 
 export const updateAGenre = async (id, payload, accessToken) => {
   try {
-    await axios.put(`http://localhost:3001/genre/${id}`, payload, {
+    const res = await axios.put(`http://localhost:3001/genre/${id}`, payload, {
       headers: { token: accessToken },
     });
+    return res.data;
   } catch (error) {
     console.log("update a genre", error);
   }

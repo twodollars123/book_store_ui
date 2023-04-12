@@ -9,15 +9,36 @@ import Paper from "@mui/material/Paper";
 import SwitchButton from "../../../../Layouts/AdminLayout/components/SwitchButton";
 import { updateAGenre } from "../../../../ApiServices/genresApi";
 import Button from "../../../../Components/Button";
+import DraggableDialog from "./CreateAndEditCategoryModal";
+import { useState } from "react";
 
-// import { useState } from "react";
-
-export default function CategoryDataGrid({ rows, allUsers, currentUser }) {
-  // const [isCheck, setIsCheck] = useState(false);
-
+export default function CategoryDataGrid({
+  rows,
+  allUsers,
+  currentUser,
+  dataGenres,
+  setDataGenres,
+}) {
   const handleChangeActive = async (e) => {
     const payload = { active: e.target.checked };
     await updateAGenre(e.target.id, payload, currentUser.accessToken);
+  };
+
+  const [dataGenreUpdate, setDataGenreUpdate] = useState({});
+  const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
+
+  const handleEditgenre = (data) => {
+    const dataGenre = data;
+    setDataGenreUpdate(dataGenre);
+    handleClickOpenCategoryDialog();
+  };
+
+  const handleClickOpenCategoryDialog = () => {
+    setOpenCategoryDialog(true);
+  };
+
+  const handleCloseCategoryDialog = () => {
+    setOpenCategoryDialog(false);
   };
 
   return (
@@ -54,24 +75,22 @@ export default function CategoryDataGrid({ rows, allUsers, currentUser }) {
               {rows &&
                 rows.length > 0 &&
                 rows.map((row, index) => {
-                  //log
-                  console.log("roe", row);
-                  // setIsCheck(row.active);
-
                   const createBy = allUsers.find(
                     (item) => item._id === row.createdBy
+                  );
+                  const updatedBy = allUsers.find(
+                    (item) => item._id === row.updatedBy
                   );
                   // genreParentId là một mảng
                   const parentGenre = rows.map((genre) => {
                     if (!row.genreParentId) {
-                      return;
+                      return "";
                     }
                     if (row.genreParentId.includes(genre._id)) {
                       return genre.name;
                     }
-                    return;
+                    return "";
                   });
-                  console.log("a", parentGenre);
                   return (
                     <TableRow
                       key={row.name}
@@ -92,7 +111,9 @@ export default function CategoryDataGrid({ rows, allUsers, currentUser }) {
                         {createBy?.username || ""}
                       </TableCell>
                       <TableCell align="left">{row.createdAt}</TableCell>
-                      <TableCell align="left">{row.updatedBy}</TableCell>
+                      <TableCell align="left">
+                        {updatedBy?.username || ""}
+                      </TableCell>
                       <TableCell align="left">{row.updatedAt}</TableCell>
                       <TableCell align="left">
                         {
@@ -104,7 +125,10 @@ export default function CategoryDataGrid({ rows, allUsers, currentUser }) {
                         }
                       </TableCell>
                       <TableCell align="left" className="category_col-action">
-                        <Button leftIcon={<i className="fa fa-edit" />} />
+                        <Button
+                          leftIcon={<i className="fa fa-edit" />}
+                          onClick={() => handleEditgenre(row)}
+                        />
                         <Button leftIcon={<i className="fa fa-trash" />} />
                       </TableCell>
                     </TableRow>
@@ -114,6 +138,17 @@ export default function CategoryDataGrid({ rows, allUsers, currentUser }) {
           </TableBody>
         </Table>
       </TableContainer>
+      {dataGenreUpdate && (
+        <DraggableDialog
+          open={openCategoryDialog}
+          handleClose={handleCloseCategoryDialog}
+          dataGenre={dataGenres}
+          dataUserCurrent={currentUser}
+          setDataGenres={setDataGenres}
+          update={true}
+          dataGenreUpdate={dataGenreUpdate}
+        />
+      )}
     </Box>
   );
 }

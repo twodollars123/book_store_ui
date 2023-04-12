@@ -60,6 +60,10 @@ function CategoryManagement() {
         rows={dataGenres}
         allUsers={dataAllUsers}
         currentUser={currentUser}
+        handleClose={handleCloseCategoryDialog}
+        dataGenres={dataGenres}
+        dataUserCurrent={currentUser}
+        setDataGenres={setDataGenres}
       />
 
       <DraggableDialog
