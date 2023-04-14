@@ -1,26 +1,42 @@
 import Grid from "@mui/material/Grid";
 import { useEffect, useState } from "react";
-import { getAllGenres } from "../../../ApiServices/genresApi";
+import { getAllGenres, getGenrePerPage } from "../../../ApiServices/genresApi";
 import BannerTilte from "../../../Layouts/AdminLayout/components/BannerTitle";
 import CategoryDataGrid from "./CategoryDataGrid";
 import { getAllUsers } from "../../../ApiServices/userApi";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+
 import DraggableDialog from "./CategoryDataGrid/CreateAndEditCategoryModal";
+import { default as Pagination } from "../../../Components/Pagination";
+import Button from "../../../Components/Button";
+import Menu from "../../../Components/Popper/Menu";
+import "./GenreManagement.scss";
 
 function CategoryManagement() {
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const [dataGenres, setDataGenres] = useState("");
   const [dataAllUsers, setDataAllUsers] = useState([]);
+
+  //pagination
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(10);
+
   useEffect(() => {
-    fetchDataGenre();
+    // fetchDataGenre();
     fetchDataAllUsers();
-  }, []);
+    fetchDataPerPage();
+  }, [page]);
 
   const fetchDataGenre = async () => {
     const result = await getAllGenres();
-
     setDataGenres(result);
+  };
+
+  const fetchDataPerPage = async () => {
+    const result = await getGenrePerPage(page);
+    setTotalPages(result.totalPages);
+    setDataGenres(result.data);
   };
 
   const fetchDataAllUsers = async () => {
@@ -49,13 +65,42 @@ function CategoryManagement() {
     setOpenCategoryDialog(false);
   };
 
+  //more option
+
+  const itemGenreOptions = [
+    { label: "Get all genres", type: "getAllGenres" },
+    { label: "Export to PDF", type: "exportTOPDF" },
+  ];
+
+  const handleClickGenreOptions = (menuItem) => {
+    switch (menuItem.type) {
+      case "getAllGenres":
+        fetchDataGenre();
+        break;
+      case "exportTOPDF":
+        break;
+      default:
+    }
+  };
+
   return (
-    <Grid container>
+    <Grid container className="genre_container">
       <BannerTilte
         titlePage={"Category Management Page"}
         btnCreate
         onClick={handleClickOpenCategoryDialog}
       />
+      <Menu
+        placement="bottom-start"
+        offset={[-30, 10]}
+        interactive={true}
+        items={itemGenreOptions}
+        onChange={handleClickGenreOptions}
+      >
+        <div className="genre__option">
+          <Button leftIcon={<i className="fa fa-navicon" />} />
+        </div>
+      </Menu>
       <CategoryDataGrid
         rows={dataGenres}
         allUsers={dataAllUsers}
@@ -65,6 +110,8 @@ function CategoryManagement() {
         dataUserCurrent={currentUser}
         setDataGenres={setDataGenres}
       />
+
+      <Pagination page={page} setPage={setPage} totalPage={totalPages} />
 
       <DraggableDialog
         open={openCategoryDialog}

@@ -13,6 +13,8 @@ function Menu({
   items = [],
   onChange = defaultFn,
   interactive = false,
+  placement = "bottom-end",
+  offset = [40, 4],
 }) {
   // lữu chữ dữ liệu
   const [menuPages, setMenuPages] = useState([{ data: items }]);
@@ -52,8 +54,8 @@ function Menu({
     <Tippy
       interactive={interactive}
       delay={[100, 100]}
-      offset={[40, 4]}
-      placement="bottom-end"
+      offset={offset}
+      placement={placement}
       render={(attrs) => (
         <div className="box" tabIndex="-1" {...attrs}>
           <PopperWrapper>{renderItems()}</PopperWrapper>

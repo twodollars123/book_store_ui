@@ -16,7 +16,7 @@ import { styled } from "@mui/material/styles";
 import MenuAdmin from "../MenuAdmin";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "@mui/material";
+import { Link } from "react-router-dom";
 import { logoutUser } from "../../../../store/apiRequest";
 import { useNavigate } from "react-router-dom";
 
@@ -65,6 +65,10 @@ function HeaderAdmin({ handleDrawerOpen, open }) {
       handleMenuClose={handleMenuClose}
     >
       <MenuItem>My Profile</MenuItem>
+      <MenuItem>
+        <Link to="/">Go to HomePage</Link>
+      </MenuItem>
+
       <MenuItem onClick={handleLogOut}>Log out</MenuItem>
     </MenuAdmin>
   );

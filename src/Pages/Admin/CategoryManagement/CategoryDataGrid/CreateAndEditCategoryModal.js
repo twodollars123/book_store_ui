@@ -47,7 +47,7 @@ const RenderCreateCategory = ({
       const isExist =
         dataGenre &&
         dataGenre.length > 0 &&
-        dataGenre.some((item) => item.name.includes(nameInputValue));
+        dataGenre.some((item) => item.name === nameInputValue.trim());
       if (isExist) {
         nameSpanRef.current.textContent = `${nameInputValue} is existed`;
       } else {
@@ -142,7 +142,7 @@ export default function DraggableDialog({
       const token = dataUserCurrent.accessToken;
       const result = await creareAGenre(payload, token);
       if (result) {
-        const newDataGenres = [...dataGenre, result];
+        const newDataGenres = [result, ...dataGenre];
         setDataGenres(newDataGenres);
       }
       setNameInputValue("");

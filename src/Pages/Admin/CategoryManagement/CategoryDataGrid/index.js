@@ -63,13 +63,13 @@ export default function CategoryDataGrid({
     <Box
       sx={{
         minHeight: "520px",
-        maxHeight: "520px",
+        // maxHeight: "520px",
         width: "95%",
         backgroundColor: "#eee",
-        margin: "-30px 0 0 30px",
+        margin: "-30px 0 30px 30px",
         borderRadius: "4px",
         padding: "20px",
-        overflow: "auto ",
+        overflow: "overlay",
       }}
     >
       <TableContainer component={Paper}>

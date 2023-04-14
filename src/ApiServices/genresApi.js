@@ -19,6 +19,17 @@ export const getAGenre = async (id) => {
   }
 };
 
+export const getGenrePerPage = async (page) => {
+  try {
+    const res = await axios.post(
+      `http://localhost:3001/genre/getpage?page=${page}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log("get genre per page", error);
+  }
+};
+
 export const creareAGenre = async (payload, token) => {
   try {
     const res = await axios.post(`http://localhost:3001/genre/`, payload, {
