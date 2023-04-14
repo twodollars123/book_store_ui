@@ -13,7 +13,6 @@ export default function PaginationCustom({
   setPage,
   totalPage = 10,
 }) {
-  console.log("totalpafe", totalPage);
   const handleChange = (event, value) => {
     setPage(value);
   };

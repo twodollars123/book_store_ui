@@ -12,6 +12,9 @@ import { default as Pagination } from "../../../Components/Pagination";
 import Button from "../../../Components/Button";
 import Menu from "../../../Components/Popper/Menu";
 import "./GenreManagement.scss";
+import { exportPDF } from "../../../Ultilities/exportPDF";
+import { exportExcel } from "../../../Ultilities";
+import { importFromExcel } from "../../../Ultilities/importFromExcel";
 
 function CategoryManagement() {
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
@@ -70,6 +73,8 @@ function CategoryManagement() {
   const itemGenreOptions = [
     { label: "Get all genres", type: "getAllGenres" },
     { label: "Export to PDF", type: "exportTOPDF" },
+    { label: "Export to Excel", type: "exportToExcel" },
+    { label: "Import from Excel", type: "importFromExcel" },
   ];
 
   const handleClickGenreOptions = (menuItem) => {
@@ -78,7 +83,15 @@ function CategoryManagement() {
         fetchDataGenre();
         break;
       case "exportTOPDF":
+        exportPDF(dataGenres, "genre.pdf");
         break;
+      case "exportToExcel":
+        exportExcel(dataGenres, "genre.xlsx");
+        break;
+      case "importFromExcel":
+        importFromExcel("D:/Downloads/genre.xlsx");
+        break;
+
       default:
     }
   };
