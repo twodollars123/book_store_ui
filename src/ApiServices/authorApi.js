@@ -2,7 +2,8 @@ import axios from "axios";
 
 export const createAAuthor = async (payload) => {
   try {
-    await axios.post(`http://localhost:3001/author`, payload);
+    const res = await axios.post(`http://localhost:3001/author`, payload);
+    return res.data;
   } catch (error) {
     console.log("create a author err", error);
   }

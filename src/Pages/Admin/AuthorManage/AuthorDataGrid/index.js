@@ -9,24 +9,27 @@ import Paper from "@mui/material/Paper";
 import SwitchButton from "../../../../Layouts/AdminLayout/components/SwitchButton";
 import { updateAGenre } from "../../../../ApiServices/genresApi";
 import Button from "../../../../Components/Button";
-import DraggableDialog from "./CreateAndEditCategoryModal";
+// import DraggableDialog from "./CreateAndEditCategoryModal";
 import { useState } from "react";
-
-import { default as DeleteModal } from "./ConfirmDeleteGenre";
 import { formatDate } from "../../../../Ultilities";
 
-export default function CategoryDataGrid({
+// import { default as DeleteModal } from "./ConfirmDeleteGenre";
+
+//sửa lại props
+export default function AuthorDataGrid({
   rows,
   allUsers,
   currentUser,
-  dataGenres,
-  setDataGenres,
+  dataAuthors,
+  setDataAuhtors,
 }) {
+  //sửa
   const handleChangeActive = async (e) => {
     const payload = { active: e.target.checked };
     await updateAGenre(e.target.id, payload, currentUser.accessToken);
   };
 
+  //sửa
   const [dataGenreUpdate, setDataGenreUpdate] = useState({});
   const [dataGenreDelete, setDataGenreDelete] = useState();
   const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
@@ -79,53 +82,49 @@ export default function CategoryDataGrid({
             <TableRow>
               <TableCell align="left">Ordinal number</TableCell>
               <TableCell align="left">Name</TableCell>
-              <TableCell align="left">Name of parent's genre</TableCell>
-              <TableCell align="left">Quantity of books</TableCell>
+              <TableCell align="left">Avatar</TableCell>
+              <TableCell align="left">Age</TableCell>
+              <TableCell align="left">Hometown</TableCell>
+              <TableCell align="left">Amount of books</TableCell>
               <TableCell align="left">Created By</TableCell>
               <TableCell align="left">Created At</TableCell>
               <TableCell align="left">Upadate By</TableCell>
               <TableCell align="left">Upadate At</TableCell>
-              <TableCell align="left">Active</TableCell>
-              <TableCell align="left">Action</TableCell>
+              <TableCell align="center">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             <>
-              {rows &&
-                rows.length > 0 &&
-                rows.map((row, index) => {
+              {dataAuthors &&
+                dataAuthors.length > 0 &&
+                dataAuthors.map((row, index) => {
                   const createBy = allUsers.find(
                     (item) => item._id === row.createdBy
                   );
                   const updatedBy = allUsers.find(
                     (item) => item._id === row.updatedBy
                   );
-                  // genreParentId là một mảng
-                  const parentGenre = rows.map((genre) => {
-                    if (!row.genreParentId) {
-                      return "";
-                    }
-                    if (row.genreParentId.includes(genre._id)) {
-                      return genre.name;
-                    }
-                    return "";
-                  });
+                  //   // genreParentId là một mảng
+                  //   const parentGenre = rows.map((genre) => {
+                  //     if (!row.genreParentId) {
+                  //       return "";
+                  //     }
+                  //     if (row.genreParentId.includes(genre._id)) {
+                  //       return genre.name;
+                  //     }
+                  //     return "";
+                  //   });
                   return (
                     <TableRow
-                      key={row.name}
+                      key={row._id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell align="left">{index + 1}</TableCell>
                       <TableCell align="left">{row.name}</TableCell>
-                      <TableCell align="left">
-                        {parentGenre.map((genreParent) => {
-                          if (genreParent) {
-                            return genreParent + "   ";
-                          }
-                          return "";
-                        })}
-                      </TableCell>
-                      <TableCell align="left">{row.books.length}</TableCell>
+                      <TableCell align="left">avatar</TableCell>
+                      <TableCell align="left">{row.age}</TableCell>
+                      <TableCell align="left">{row.hometown}</TableCell>
+                      <TableCell align="center">{row.books.length}</TableCell>
                       <TableCell align="left">
                         {createBy?.username || ""}
                       </TableCell>
@@ -137,15 +136,6 @@ export default function CategoryDataGrid({
                       </TableCell>
                       <TableCell align="left">
                         {formatDate(row.updatedAt)}
-                      </TableCell>
-                      <TableCell align="left">
-                        {
-                          <SwitchButton
-                            id_togglebtn={row._id}
-                            isCheck={row.active}
-                            onClick={handleChangeActive}
-                          />
-                        }
                       </TableCell>
                       <TableCell align="left" className="category_col-action">
                         <Button
@@ -164,7 +154,7 @@ export default function CategoryDataGrid({
           </TableBody>
         </Table>
       </TableContainer>
-      {dataGenreUpdate && (
+      {/* {dataGenreUpdate && (
         <DraggableDialog
           open={openCategoryDialog}
           handleClose={handleCloseCategoryDialog}
@@ -182,7 +172,7 @@ export default function CategoryDataGrid({
         currentUser={currentUser}
         dataGenre={dataGenres}
         setDataGenres={setDataGenres}
-      />
+      /> */}
     </Box>
   );
 }

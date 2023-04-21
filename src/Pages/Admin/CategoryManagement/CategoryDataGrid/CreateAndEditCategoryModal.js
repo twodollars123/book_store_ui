@@ -164,18 +164,6 @@ export default function DraggableDialog({
   };
 
   const handleUpdate = async () => {
-    // if (!nameInputValue && parentGenre.length <= 0) {
-    //   toast.error("Must change name!", {
-    //     position: toast.POSITION.TOP_RIGHT,
-    //     autoClose: 2000,
-    //     hideProgressBar: true,
-    //     closeOnClick: true,
-    //     pauseOnHover: false,
-    //     draggable: true,
-    //     progress: undefined,
-    //   });
-    //   return;
-    // } else {
     let payload = {
       updatedBy: dataUserCurrent._id,
       genreParentId: parentGenre,
@@ -183,9 +171,7 @@ export default function DraggableDialog({
     if (nameInputValue) {
       payload = { ...payload, name: nameInputValue };
     }
-    // if (parentGenre.length > 0) {
-    //   payload = { ...payload, genreParentId: parentGenre };
-    // }
+
     const result = await updateAGenre(
       dataGenreUpdate._id,
       payload,
