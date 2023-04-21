@@ -12,13 +12,15 @@ import { exportPDF } from "../../../Ultilities/exportPDF";
 import { exportExcel } from "../../../Ultilities";
 import { importFromExcel } from "../../../Ultilities/importFromExcel";
 import AuthorDataGrid from "./AuthorDataGrid";
-import { getAllAuthor } from "../../../ApiServices/authorApi";
+import { getAllAuthor, getAuthorPerPage } from "../../../ApiServices/authorApi";
 import { default as CreateAuthorModal } from "./AuthorDataGrid/CreateAndEditAuthorModal";
 
 function AuthorManage() {
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   //đổi thành data author
   const [dataAuthors, setDataAuthors] = useState([]);
+  const [dataAllAuthors, setDataAllAuthors] = useState([]);
+
   const [dataAllUsers, setDataAllUsers] = useState([]);
 
   //pagination
@@ -29,20 +31,19 @@ function AuthorManage() {
   useEffect(() => {
     fetchDataAuthor();
     fetchDataAllUsers();
-    // fetchDataPerPage();
+    fetchDataAuthorPerPage();
   }, [page]);
 
-  //đổi
   const fetchDataAuthor = async () => {
     const result = await getAllAuthor();
-    setDataAuthors(result);
+    setDataAllAuthors(result);
   };
 
-  // const fetchDataPerPage = async () => {
-  //   const result = await getGenrePerPage(page);
-  //   setTotalPages(result.totalPages);
-  //   // setDataGenres(result.data);
-  // };
+  const fetchDataAuthorPerPage = async () => {
+    const result = await getAuthorPerPage(page);
+    setTotalPages(result.totalPages);
+    setDataAuthors(result.data);
+  };
 
   const fetchDataAllUsers = async () => {
     if (!currentUser) {
@@ -74,12 +75,12 @@ function AuthorManage() {
   //more option
   //đổi
 
-  const itemGenreOptions = [
-    { label: "Get all genres", type: "getAllGenres" },
-    { label: "Export to PDF", type: "exportTOPDF" },
-    { label: "Export to Excel", type: "exportToExcel" },
-    { label: "Import from Excel", type: "importFromExcel" },
-  ];
+  // const itemGenreOptions = [
+  //   { label: "Get all genres", type: "getAllGenres" },
+  //   { label: "Export to PDF", type: "exportTOPDF" },
+  //   { label: "Export to Excel", type: "exportToExcel" },
+  //   { label: "Import from Excel", type: "importFromExcel" },
+  // ];
 
   // const handleClickGenreOptions = (menuItem) => {
   //   switch (menuItem.type) {
@@ -131,6 +132,7 @@ function AuthorManage() {
       <CreateAuthorModal
         open={openAuthorDialog}
         handleClose={handleCloseAuthorDialog}
+        dataAllAuthors={dataAllAuthors}
         dataAuthors={dataAuthors}
         dataUserCurrent={currentUser}
         setDataAuthors={setDataAuthors}

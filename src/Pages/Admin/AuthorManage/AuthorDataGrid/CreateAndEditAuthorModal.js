@@ -12,7 +12,10 @@ import "./AuthorDataGrid.scss";
 import MultiSelect from "../../../../Components/MultiSelect";
 import { toast } from "react-toastify";
 import { creareAGenre, updateAGenre } from "../../../../ApiServices/genresApi";
-import { createAAuthor } from "../../../../ApiServices/authorApi";
+import {
+  createAAuthor,
+  updateAAuthor,
+} from "../../../../ApiServices/authorApi";
 
 function PaperComponent(props) {
   return (
@@ -33,42 +36,49 @@ export default function DraggableDialog({
   dataUserCurrent,
   setDataAuthors,
   dataAuthorUpdate,
+  dataAllAuthors,
 }) {
   const [name, setName] = React.useState();
   const [age, setAge] = React.useState();
-  const [hometown, setHometown] = React.useState("unknown");
-  const [avatar, setAvatar] = React.useState("unknown");
+  const [hometown, setHometown] = React.useState();
+  const [avatar, setAvatar] = React.useState();
   const [validated, setValidated] = React.useState(false);
   const nameInputRef = React.useRef();
   const nameSpanRef = React.useRef();
 
-  //   const handleUpdate = async () => {
-  //     let payload = {
-  //       updatedBy: dataUserCurrent._id,
-  //       genreParentId: parentGenre,
-  //     };
-  //     if (nameInputValue) {
-  //       payload = { ...payload, name: nameInputValue };
-  //     }
-
-  //     const result = await updateAGenre(
-  //       dataGenreUpdate._id,
-  //       payload,
-  //       dataUserCurrent.accessToken
-  //     );
-  //     //tìm index trong dataGenre thay thế result vào vị trí index
-
-  //     if (result) {
-  //       const index = dataGenre.indexOf(
-  //         dataGenre.find((item) => item._id === result._id)
-  //       );
-  //       const newDataGenres = [...dataGenre];
-  //       newDataGenres.splice(index, 1, result);
-  //       setDataGenres(newDataGenres);
-  //     }
-  //     handleClose();
-  //     // }
-  //   };
+  const handleUpdate = async () => {
+    const nameUpdated = name ? name : dataAuthorUpdate.name;
+    const ageUpdated = age ? age : dataAuthorUpdate.age;
+    const hometownUpdated = hometown ? hometown : dataAuthorUpdate.hometown;
+    const avatarUpdated = avatar ? avatar : dataAuthorUpdate.avatar;
+    const updatedAuthor = {
+      name: nameUpdated,
+      age: ageUpdated,
+      hometown: hometownUpdated,
+      avatar: avatarUpdated,
+      updatedBy: dataUserCurrent._id,
+    };
+    const id = dataAuthorUpdate._id;
+    const accessToken = dataUserCurrent.accessToken;
+    if (!name && !age && !hometown && !avatar) {
+      toast.error(`Can not update if does not have a modification`, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+      });
+    } else {
+      const dataUpdated = await updateAAuthor(id, updatedAuthor, accessToken);
+      const newDataAuthors = [...dataAuthors];
+      const index = newDataAuthors.indexOf(dataAuthorUpdate);
+      newDataAuthors.splice(index, 1, dataUpdated);
+      setDataAuthors(newDataAuthors);
+      handleClose();
+    }
+  };
   const validateName = (e) => {
     const nameValue = e.target.value;
     //kiểm tra rỗng, trùng tên đã có
@@ -78,9 +88,9 @@ export default function DraggableDialog({
         "Do not leave the name of genre field blank";
     } else {
       const isExist =
-        dataAuthors &&
-        dataAuthors.length > 0 &&
-        dataAuthors.some((item) => item.name === nameValue.trim());
+        dataAllAuthors &&
+        dataAllAuthors.length > 0 &&
+        dataAllAuthors.some((item) => item.name === nameValue.trim());
       if (isExist) {
         nameSpanRef.current.textContent = "this name is exist";
       } else {
@@ -162,7 +172,7 @@ export default function DraggableDialog({
                   type="number"
                   placeholder="The age of new author"
                   className="content__create__input--name"
-                  defaultValue={update ? dataAuthorUpdate.name : ""}
+                  defaultValue={update ? dataAuthorUpdate.age : ""}
                   onChange={(e) => setAge(e.target.value)}
                   onBlur={validateAge}
                 />
@@ -175,7 +185,7 @@ export default function DraggableDialog({
                   //   ref={nameInputRef}
                   placeholder="The hometown of new author"
                   className="content__create__input--name"
-                  defaultValue={update ? dataAuthorUpdate.name : ""}
+                  defaultValue={update ? dataAuthorUpdate.hometown : ""}
                   onChange={(e) => setHometown(e.target.value)}
                   onBlur={validateHometown}
                 />
@@ -187,7 +197,7 @@ export default function DraggableDialog({
                   //   placeholder="The name of new author"
                   type="file"
                   className="content__create__input--name"
-                  defaultValue={update ? dataAuthorUpdate.name : ""}
+                  // defaultValue={update ? dataAuthorUpdate. : ""}
                   onChange={(e) => setAvatar(e.target.value)}
                 />
               </span>
@@ -198,10 +208,9 @@ export default function DraggableDialog({
           <Button autoFocus onClick={handleClose}>
             Cancel
           </Button>
-          <Button onClick={handleClickCreate}>Create</Button>
-          {/* <Button onClick={update ? handleUpdate : handleSubmit}>
+          <Button onClick={update ? handleUpdate : handleClickCreate}>
             {update ? "Update" : "Create"}
-          </Button> */}
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

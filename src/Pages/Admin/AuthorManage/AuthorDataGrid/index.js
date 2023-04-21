@@ -9,7 +9,7 @@ import Paper from "@mui/material/Paper";
 import SwitchButton from "../../../../Layouts/AdminLayout/components/SwitchButton";
 import { updateAGenre } from "../../../../ApiServices/genresApi";
 import Button from "../../../../Components/Button";
-// import DraggableDialog from "./CreateAndEditCategoryModal";
+import { default as UpdateAuthorModal } from "./CreateAndEditAuthorModal";
 import { useState } from "react";
 import { formatDate } from "../../../../Ultilities";
 
@@ -17,22 +17,15 @@ import { formatDate } from "../../../../Ultilities";
 
 //sửa lại props
 export default function AuthorDataGrid({
-  rows,
   allUsers,
   currentUser,
   dataAuthors,
-  setDataAuhtors,
+  setDataAuthors,
 }) {
   //sửa
-  const handleChangeActive = async (e) => {
-    const payload = { active: e.target.checked };
-    await updateAGenre(e.target.id, payload, currentUser.accessToken);
-  };
-
-  //sửa
-  const [dataGenreUpdate, setDataGenreUpdate] = useState({});
-  const [dataGenreDelete, setDataGenreDelete] = useState();
-  const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
+  const [dataAuthorUpdate, setDataAuthorUpdate] = useState({});
+  const [dataAuthorDelete, setDataAuthorDelete] = useState();
+  const [openUpdateAuthor, setOpenUpdateAuthor] = useState(false);
   const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState(false);
 
   const handleOpenConfirmDeleteModal = () => {
@@ -43,24 +36,24 @@ export default function AuthorDataGrid({
     setOpenConfirmDeleteModal(false);
   };
 
-  const hanldeDeleteGenre = (data) => {
+  const hanldeDeleteAuthor = (data) => {
     const deletedGenre = data;
-    setDataGenreDelete(deletedGenre);
-    handleOpenConfirmDeleteModal();
+    // setDataGenreDelete(deletedGenre);
+    // handleOpenConfirmDeleteModal();
   };
 
-  const handleEditgenre = (data) => {
+  const handleEditAuthor = (data) => {
     const dataGenre = data;
-    setDataGenreUpdate(dataGenre);
-    handleClickOpenCategoryDialog();
+    setDataAuthorUpdate(dataGenre);
+    handleClickOpenUpdateAuthor();
   };
 
-  const handleClickOpenCategoryDialog = () => {
-    setOpenCategoryDialog(true);
+  const handleClickOpenUpdateAuthor = () => {
+    setOpenUpdateAuthor(true);
   };
 
-  const handleCloseCategoryDialog = () => {
-    setOpenCategoryDialog(false);
+  const handleCloseUpdateAuthor = () => {
+    setOpenUpdateAuthor(false);
   };
 
   return (
@@ -140,11 +133,11 @@ export default function AuthorDataGrid({
                       <TableCell align="left" className="category_col-action">
                         <Button
                           leftIcon={<i className="fa fa-edit" />}
-                          onClick={() => handleEditgenre(row)}
+                          onClick={() => handleEditAuthor(row)}
                         />
                         <Button
                           leftIcon={<i className="fa fa-trash" />}
-                          onClick={() => hanldeDeleteGenre(row)}
+                          onClick={() => hanldeDeleteAuthor(row)}
                         />
                       </TableCell>
                     </TableRow>
@@ -154,18 +147,18 @@ export default function AuthorDataGrid({
           </TableBody>
         </Table>
       </TableContainer>
-      {/* {dataGenreUpdate && (
-        <DraggableDialog
-          open={openCategoryDialog}
-          handleClose={handleCloseCategoryDialog}
-          dataGenre={dataGenres}
-          dataUserCurrent={currentUser}
-          setDataGenres={setDataGenres}
-          update={true}
-          dataGenreUpdate={dataGenreUpdate}
-        />
-      )}
-      <DeleteModal
+
+      <UpdateAuthorModal
+        open={openUpdateAuthor}
+        handleClose={handleCloseUpdateAuthor}
+        dataAuthors={dataAuthors}
+        setDataAuthors={setDataAuthors}
+        dataUserCurrent={currentUser}
+        update={true}
+        dataAuthorUpdate={dataAuthorUpdate}
+      />
+
+      {/* <DeleteModal
         open={openConfirmDeleteModal}
         handleClose={handleCloseConfirmDeleteModal}
         dataGenreDelete={dataGenreDelete}

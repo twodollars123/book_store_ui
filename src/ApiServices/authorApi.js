@@ -27,11 +27,27 @@ export const getAllAuthor = async () => {
   }
 };
 
-export const updateAAuthor = async (payload) => {
+export const getAuthorPerPage = async (page = 1, perPage = 5) => {
   try {
-    await axios.put(`http://localhost:3001/author/:${payload._id}`, payload, {
-      headers: { token: payload.accessToken },
-    });
+    const res = await axios.get(
+      `http://localhost:3001/author/getpage/?page=${page}&perpage=${perPage}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log("get author per page err", error);
+  }
+};
+
+export const updateAAuthor = async (id, payload, accessToken) => {
+  try {
+    const result = await axios.put(
+      `http://localhost:3001/author/${id}`,
+      payload,
+      {
+        headers: { token: accessToken },
+      }
+    );
+    return result.data;
   } catch (error) {
     console.log("update a author err", error);
   }
