@@ -9,9 +9,7 @@ import Paper from "@mui/material/Paper";
 import Draggable from "react-draggable";
 
 import "./AuthorDataGrid.scss";
-import MultiSelect from "../../../../Components/MultiSelect";
 import { toast } from "react-toastify";
-import { creareAGenre, updateAGenre } from "../../../../ApiServices/genresApi";
 import {
   createAAuthor,
   updateAAuthor,

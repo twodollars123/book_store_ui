@@ -6,10 +6,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import SwitchButton from "../../../../Layouts/AdminLayout/components/SwitchButton";
-import { updateAGenre } from "../../../../ApiServices/genresApi";
 import Button from "../../../../Components/Button";
 import { default as UpdateAuthorModal } from "./CreateAndEditAuthorModal";
+import { default as DeleteAuthorModal } from "./ConfirmDeleteAuthor";
 import { useState } from "react";
 import { formatDate } from "../../../../Ultilities";
 
@@ -37,9 +36,9 @@ export default function AuthorDataGrid({
   };
 
   const hanldeDeleteAuthor = (data) => {
-    const deletedGenre = data;
-    // setDataGenreDelete(deletedGenre);
-    // handleOpenConfirmDeleteModal();
+    const deletedAuthor = data;
+    setDataAuthorDelete(deletedAuthor);
+    handleOpenConfirmDeleteModal();
   };
 
   const handleEditAuthor = (data) => {
@@ -158,14 +157,14 @@ export default function AuthorDataGrid({
         dataAuthorUpdate={dataAuthorUpdate}
       />
 
-      {/* <DeleteModal
+      <DeleteAuthorModal
         open={openConfirmDeleteModal}
         handleClose={handleCloseConfirmDeleteModal}
-        dataGenreDelete={dataGenreDelete}
+        dataAuthorDelete={dataAuthorDelete}
         currentUser={currentUser}
-        dataGenre={dataGenres}
-        setDataGenres={setDataGenres}
-      /> */}
+        dataAuthors={dataAuthors}
+        setDataAuthors={setDataAuthors}
+      />
     </Box>
   );
 }

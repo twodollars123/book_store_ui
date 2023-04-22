@@ -53,11 +53,12 @@ export const updateAAuthor = async (id, payload, accessToken) => {
   }
 };
 
-export const deleteAAuthor = async (payload) => {
+export const deleteAAuthor = async (id, accessToken) => {
   try {
-    await axios.delete(`http://localhost:3001/author/:${payload.id}`, {
-      headers: { token: payload.accessToken },
+    const res = await axios.delete(`http://localhost:3001/author/${id}`, {
+      headers: { token: accessToken },
     });
+    return res.data;
   } catch (error) {
     console.log("delete a author err", error);
   }
