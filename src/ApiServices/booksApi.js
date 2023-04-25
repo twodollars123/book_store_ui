@@ -14,7 +14,18 @@ export const getAllBooks = async () => {
     const res = await axios.get(`http://localhost:3001/book`);
     return res.data;
   } catch (error) {
-    console.log("get a book falure", error);
+    console.log("get all book falure", error);
+  }
+};
+
+export const getBooksPerPage = async (page = 1, perpage = 5) => {
+  try {
+    const res = await axios.post(
+      `http://localhost:3001/book/pagination/?page=${page}&perPage=${perpage}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log("get book per page falure", error);
   }
 };
 

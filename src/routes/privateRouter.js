@@ -2,6 +2,7 @@ import AdminLayout from "../Layouts/AdminLayout";
 import AccountManagement from "../Pages/Admin/AccoutManagerment";
 import AdminDashboard from "../Pages/Admin/AdminDashboard";
 import AuthorManage from "../Pages/Admin/AuthorManage";
+import BookManage from "../Pages/Admin/BookManage";
 import CategoryManagement from "../Pages/Admin/CategoryManagement";
 
 export const privateRouter = [
@@ -23,6 +24,11 @@ export const privateRouter = [
   {
     path: "/admin/authormanagement",
     component: AuthorManage,
+    layout: AdminLayout,
+  },
+  {
+    path: "/admin/bookmanagement",
+    component: BookManage,
     layout: AdminLayout,
   },
 ];
