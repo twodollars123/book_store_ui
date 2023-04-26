@@ -1,10 +1,10 @@
 import Select from "react-select";
 
-function MultiSelect({ options, onChange, defaultValue }) {
+function MultiSelect({ options, onChange, defaultValue, isMulti = true }) {
   return (
     <Select
       defaultValue={defaultValue}
-      isMulti
+      isMulti={isMulti}
       name="colors"
       options={options}
       className="basic-multi-select"

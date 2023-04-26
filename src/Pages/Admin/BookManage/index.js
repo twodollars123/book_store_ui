@@ -13,8 +13,9 @@ import BookDataGrid from "./BookDataGrid";
 // import { exportPDF } from "../../../Ultilities/exportPDF";
 // import { exportExcel } from "../../../Ultilities";
 // import { importFromExcel } from "../../../Ultilities/importFromExcel";
-// import { getAllAuthor, getAuthorPerPage } from "../../../ApiServices/authorApi";
-// import { default as CreateAuthorModal } from "./AuthorDataGrid/CreateAndEditAuthorModal";
+import { getAllAuthor } from "../../../ApiServices/authorApi";
+import { getAllGenres } from "../../../ApiServices/genresApi";
+import { default as CreateBookModal } from "./CreateBookModal";
 
 function BookManage() {
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
@@ -22,6 +23,10 @@ function BookManage() {
   const [dataAllBooks, setDataAllBooks] = useState([]);
 
   const [dataAllUsers, setDataAllUsers] = useState([]);
+
+  const [dataAllAuthors, setDataAllAuthors] = useState([]);
+
+  const [dataAllGenres, setDataAllGenres] = useState([]);
 
   //pagination
   const [page, setPage] = useState(1);
@@ -32,6 +37,8 @@ function BookManage() {
     fetchBooksPerPage();
     fetchAllBooks();
     fetchDataAllUsers();
+    fetchAllAuthors();
+    fetchAllGenres();
   }, [page]);
 
   const fetchAllBooks = async () => {
@@ -57,6 +64,16 @@ function BookManage() {
         setDataAllUsers(res);
       }
     }
+  };
+
+  const fetchAllAuthors = async () => {
+    const result = await getAllAuthor();
+    setDataAllAuthors(result);
+  };
+
+  const fetchAllGenres = async () => {
+    const result = await getAllGenres();
+    setDataAllGenres(result);
   };
 
   //dialog create or edit category
@@ -106,7 +123,7 @@ function BookManage() {
       <BannerTilte
         titlePage={"Book Management Page"}
         btnCreate
-        // onClick={handleClickOpenAuthorDialog}
+        onClick={handleClickOpenBookDialog}
       />
       {/* <Menu
         placement="bottom-start"
@@ -125,18 +142,22 @@ function BookManage() {
         handleClose={handleClickOpenBookDialog}
         dataBooks={dataBooks}
         setDataBooks={setDataBooks}
+        dataAllAuthors={dataAllAuthors}
+        dataAllGenres={dataAllGenres}
       />
 
       <Pagination page={page} setPage={setPage} totalPage={totalPages || 10} />
 
-      {/* <CreateAuthorModal
-        open={openAuthorDialog}
-        handleClose={handleCloseAuthorDialog}
-        dataAllAuthors={dataAllAuthors}
-        dataAuthors={dataAuthors}
+      <CreateBookModal
+        open={openBookDialog}
+        handleClose={handleCloseBookDialog}
+        dataAllBooks={dataAllBooks}
+        dataBooks={dataBooks}
+        setDataBooks={setDataBooks}
         dataUserCurrent={currentUser}
-        setDataAuthors={setDataAuthors}
-      /> */}
+        dataAllAuthors={dataAllAuthors}
+        dataAllGenres={dataAllGenres}
+      />
     </Grid>
   );
 }

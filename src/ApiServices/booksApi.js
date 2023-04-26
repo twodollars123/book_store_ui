@@ -31,7 +31,8 @@ export const getBooksPerPage = async (page = 1, perpage = 5) => {
 
 export const createABook = async (payload) => {
   try {
-    await axios.post(`http://localhost:3001/book`, payload);
+    const res = await axios.post(`http://localhost:3001/book`, payload);
+    return res.data;
   } catch (error) {
     console.log("create a book falure", error);
   }
@@ -39,9 +40,15 @@ export const createABook = async (payload) => {
 
 export const updateABook = async (payload) => {
   try {
-    await axios.put(`http://localhost:3001/book/:${payload._id}`, payload, {
-      headers: { token: payload.accessToken },
-    });
+    const res = await axios.put(
+      `http://localhost:3001/book/:${payload._id}`,
+      payload,
+      {
+        headers: { token: payload.accessToken },
+      }
+    );
+
+    return res.data;
   } catch (error) {
     console.log("update a book falure", error);
   }

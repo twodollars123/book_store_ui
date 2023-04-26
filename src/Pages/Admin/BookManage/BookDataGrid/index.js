@@ -6,46 +6,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { formatCurrent } from "../../../../Ultilities";
 
 export default function AuthorDataGrid({
   allUsers,
   currentUser,
   dataBooks,
   setDataBooks,
+  dataAllGenres,
+  dataAllAuthors,
 }) {
-  //   const [dataAuthorUpdate, setDataAuthorUpdate] = useState({});
-  //   const [dataAuthorDelete, setDataAuthorDelete] = useState();
-  //   const [openUpdateAuthor, setOpenUpdateAuthor] = useState(false);
-  //   const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState(false);
-
-  //   const handleOpenConfirmDeleteModal = () => {
-  //     setOpenConfirmDeleteModal(true);
-  //   };
-
-  //   const handleCloseConfirmDeleteModal = () => {
-  //     setOpenConfirmDeleteModal(false);
-  //   };
-
-  //   const hanldeDeleteAuthor = (data) => {
-  //     const deletedAuthor = data;
-  //     setDataAuthorDelete(deletedAuthor);
-  //     handleOpenConfirmDeleteModal();
-  //   };
-
-  //   const handleEditAuthor = (data) => {
-  //     const dataGenre = data;
-  //     setDataAuthorUpdate(dataGenre);
-  //     handleClickOpenUpdateAuthor();
-  //   };
-
-  //   const handleClickOpenUpdateAuthor = () => {
-  //     setOpenUpdateAuthor(true);
-  //   };
-
-  //   const handleCloseUpdateAuthor = () => {
-  //     setOpenUpdateAuthor(false);
-  //   };
-
   return (
     <Box
       sx={{
@@ -80,6 +50,17 @@ export default function AuthorDataGrid({
               {dataBooks &&
                 dataBooks.length > 0 &&
                 dataBooks.map((row, index) => {
+                  const genres = dataAllGenres.map((item) => {
+                    if (row.genres.includes(item._id)) {
+                      return item.name + " ";
+                    }
+                  });
+                  const author = dataAllAuthors.map((item) => {
+                    if (item._id === row.author) {
+                      return item.name;
+                    }
+                  });
+
                   return (
                     <TableRow
                       key={row._id}
@@ -95,7 +76,9 @@ export default function AuthorDataGrid({
                       <TableCell align="left">{row.name}</TableCell>
                       <TableCell align="left">{row.description}</TableCell>
                       <TableCell align="left">{row.thumnel}</TableCell>
-                      <TableCell align="left">{row.price}</TableCell>
+                      <TableCell align="left">
+                        {formatCurrent(row.price)}
+                      </TableCell>
                       <TableCell align="center">
                         {row.inventoryQuantity}
                       </TableCell>
@@ -103,8 +86,8 @@ export default function AuthorDataGrid({
                         {row.purchasedQuantity}
                       </TableCell>
                       <TableCell align="left">{row.assessStar}</TableCell>
-                      <TableCell align="left">{row.genres}</TableCell>
-                      <TableCell align="left">{row.author}</TableCell>
+                      <TableCell align="left">{genres}</TableCell>
+                      <TableCell align="left">{author}</TableCell>
                       <TableCell align="left">{row.priorityPoints}</TableCell>
                       {/* <TableCell align="left" className="category_col-action">
                         <Button
