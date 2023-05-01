@@ -197,7 +197,7 @@ export default function DraggableDialog({
               <span className="content__create__inputgroup">
                 <label className="content__create__label--name">Thumnel:</label>
                 <input
-                  type="file"
+                  className="content__create__input--name"
                   onChange={(e) => setThumnel(e.target.value)}
                 />
               </span>

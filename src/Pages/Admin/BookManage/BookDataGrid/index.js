@@ -35,7 +35,9 @@ export default function AuthorDataGrid({
               <TableCell align="left">Ordinal number</TableCell>
               <TableCell align="left">Name</TableCell>
               <TableCell align="left">Description</TableCell>
-              <TableCell align="left">Thumnel</TableCell>
+              <TableCell align="left" sx={{ maxWidth: "120px" }}>
+                Thumnel
+              </TableCell>
               <TableCell align="left">Price</TableCell>
               <TableCell align="left">Inventory Quantity</TableCell>
               <TableCell align="left">Purchased Quantity</TableCell>
@@ -75,7 +77,16 @@ export default function AuthorDataGrid({
                       <TableCell align="left">{index + 1}</TableCell>
                       <TableCell align="left">{row.name}</TableCell>
                       <TableCell align="left">{row.description}</TableCell>
-                      <TableCell align="left">{row.thumnel}</TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          maxWidth: "200px",
+                          overflow: "hidden",
+                          whiteSpace: "wrap",
+                        }}
+                      >
+                        <p style={{ wordWrap: "break-word" }}>{row.thumnel}</p>
+                      </TableCell>
                       <TableCell align="left">
                         {formatCurrent(row.price)}
                       </TableCell>
