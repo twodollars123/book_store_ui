@@ -15,6 +15,7 @@ import {
   getAllUsersSuccess,
 } from "./userSlice";
 import { persistor } from "./index";
+import { addToCart } from "./cartSlice";
 
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
@@ -79,4 +80,33 @@ export const logoutUser = async (accessToken, dispatch, navigate) => {
   } catch (error) {
     dispatch(loginFailed());
   }
+};
+
+//add cart
+export const addCart = async (idUser, payload, dispatch) => {
+  try {
+    const res = await axios.post(
+      `http://localhost:3001/cart/${idUser}/addtocart`,
+      payload
+    );
+    if (res.data.items) {
+      dispatch(addToCart(res.data.items));
+    }
+  } catch (error) {}
+};
+
+export const changeQuantity = async (
+  idUser,
+  payload = { id: 0, quantity: 0 },
+  dispatch
+) => {
+  try {
+    const res = axios.post(
+      `http://localhost:3001/cart/${idUser}/changequantity`,
+      payload
+    );
+    if (res.data) {
+      dispatch(addToCart(res.data.items));
+    }
+  } catch (error) {}
 };

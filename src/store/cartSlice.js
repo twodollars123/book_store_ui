@@ -1,31 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import { getCart } from "../ApiServices/cartApi";
 
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    users: {
-      allUsers: null,
-      isFetching: false,
-      isError: false,
-    },
+    items: [],
   },
   reducers: {
-    getAllUsersStart: (state) => {
-      state.users.isFetching = true;
+    addToCart(state, action) {
+      const item = action.payload;
+      state.items.push(item);
+
+      // const existingProduct = state.items.find((p) => p.id === item.id);
+      // if (existingProduct) {
+      //   existingProduct.quantity += item.quantity;
+      // } else {
+      //   state.items.push(item);
+      // }
     },
-    getAllUsersSuccess: (state, action) => {
-      state.users.isFetching = false;
-      state.users.allUsers = action.payload;
+    removeFromCart(state, action) {
+      const id = action.payload;
+      state.items = state.items.filter((item) => item.id !== id);
     },
-    getAllUsersFalure: (state) => {
-      state.users.isError = true;
-      state.users.isFetching = false;
+    clearCart(state) {
+      state.items = [];
     },
   },
 });
 
-export const { getAllUsersFalure, getAllUsersStart, getAllUsersSuccess } =
-  cartSlice.actions;
+export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

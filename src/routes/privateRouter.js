@@ -4,6 +4,7 @@ import AdminDashboard from "../Pages/Admin/AdminDashboard";
 import AuthorManage from "../Pages/Admin/AuthorManage";
 import BookManage from "../Pages/Admin/BookManage";
 import CategoryManagement from "../Pages/Admin/CategoryManagement";
+import Cart from "../Pages/User/Cart";
 
 export const privateRouter = [
   {
@@ -30,5 +31,9 @@ export const privateRouter = [
     path: "/admin/bookmanagement",
     component: BookManage,
     layout: AdminLayout,
+  },
+  {
+    path: "/cart",
+    component: Cart,
   },
 ];

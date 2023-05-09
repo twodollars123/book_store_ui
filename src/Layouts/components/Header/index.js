@@ -12,29 +12,19 @@ import Button from "../../../Components/Button";
 import Menu from "../../../Components/Popper/Menu";
 import Navi from "../Navi";
 import Search from "../Search";
-import { addToCart, getItem } from "../../../store/cartSlice";
-import { useEffect } from "react";
 
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const getItemsFromCart = () => {
-    // dispatch(getItem());
-  };
-
-  useEffect(() => {
-    const items = getItemsFromCart();
-    console.log("A", items);
-    // dispatch(addToCart({ id: 1, name: "Product A", quantity: 1 }));
-  }, []);
+  const currentUser = useSelector((state) => state.auth.login?.currentUser);
+  const carts = useSelector((state) => state.cart.items);
 
   const data = [];
   const cartItem =
     data && data.length > 0 ? data : [{ label: "Chưa có sản phẩm nào" }];
 
   //test
-  const currentUser = useSelector((state) => state.auth.login?.currentUser);
 
   //data menu user
   const DATA_MENU_ITEMS_USER = [
@@ -142,7 +132,7 @@ function Header() {
                 to="/cart"
                 leftIcon={<i className="fa fa-shopping-bag " />}
                 badge
-                countBadge={10}
+                countBadge={carts[carts.length - 1].length}
               ></Button>
             </span>
           </Menu>

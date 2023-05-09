@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getABook = async (id) => {
   try {
-    const res = await axios.get(`http://localhost:3001/book/:${id}`);
+    const res = await axios.get(`http://localhost:3001/book/${id}`);
     return res.data;
   } catch (error) {
     console.log("get a book falure", error);
