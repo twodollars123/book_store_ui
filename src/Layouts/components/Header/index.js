@@ -12,16 +12,29 @@ import Button from "../../../Components/Button";
 import Menu from "../../../Components/Popper/Menu";
 import Navi from "../Navi";
 import Search from "../Search";
+import { addToCart, getItem } from "../../../store/cartSlice";
+import { useEffect } from "react";
 
 function Header() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const getItemsFromCart = () => {
+    // dispatch(getItem());
+  };
+
+  useEffect(() => {
+    const items = getItemsFromCart();
+    console.log("A", items);
+    // dispatch(addToCart({ id: 1, name: "Product A", quantity: 1 }));
+  }, []);
+
   const data = [];
   const cartItem =
     data && data.length > 0 ? data : [{ label: "Chưa có sản phẩm nào" }];
 
   //test
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   //data menu user
   const DATA_MENU_ITEMS_USER = [

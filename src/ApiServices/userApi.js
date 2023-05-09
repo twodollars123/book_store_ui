@@ -12,3 +12,14 @@ export const getAllUsers = async (accessToken) => {
     }
   } catch (error) {}
 };
+
+export const updateUser = async (payload, accessToken, id) => {
+  try {
+    const res = await axios.put(`http://localhost:3001/user/${id}`, payload, {
+      headers: { token: accessToken },
+    });
+    return res.data;
+  } catch (error) {
+    console.log("update failure");
+  }
+};

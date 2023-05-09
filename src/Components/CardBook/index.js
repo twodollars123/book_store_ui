@@ -6,7 +6,16 @@ import { formatCurrent } from "../../Ultilities";
 
 const cx = classNames.bind(style);
 
-function CardBook({ src, alt, author, title, price, sale }) {
+function CardBook({
+  src,
+  alt,
+  author,
+  title,
+  price,
+  sale,
+  handleAddCart,
+  handleCompare,
+}) {
   return (
     <div className={cx("container")}>
       {sale && <span className={cx("sale")}>{sale}</span>}
@@ -20,15 +29,15 @@ function CardBook({ src, alt, author, title, price, sale }) {
           <p className={cx("primary__cost")}>{formatCurrent(price)}</p>
           <p className={cx("pre__sale__cost")}>{formatCurrent(price)}</p>
         </span>
-        <span className={cx("action")}>
-          <buton className={cx("btn__addcart")}>
+        <div className={cx("action")}>
+          <buton className={cx("btn__addcart")} onClick={handleAddCart}>
             <i className="fa fa-cart-plus" />
             Thêm vào giỏ hàng
           </buton>
-          <button className={cx("btn__compare")}>
+          <button className={cx("btn__compare")} onClick={handleCompare}>
             So sánh sản phẩm tương tự
           </button>
-        </span>
+        </div>
       </div>
     </div>
   );
