@@ -91,7 +91,7 @@ function Cart() {
         <span>
           <p>Tổng thanh toán: </p>
         </span>
-        <Button>Thanh toán</Button>
+        <Button to="/payment">Thanh toán</Button>
       </div>
     </div>
   );
