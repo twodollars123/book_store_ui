@@ -12,13 +12,27 @@ import Button from "../../../Components/Button";
 import Menu from "../../../Components/Popper/Menu";
 import Navi from "../Navi";
 import Search from "../Search";
+import { getCart } from "../../../ApiServices/cartApi";
+import { useEffect, useState } from "react";
 
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [dataCart, setDataCart] = useState([]);
+  const [amountCart, setAmountCart] = useState(0);
 
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
-  const carts = useSelector((state) => state.cart.items);
+  // const carts = useSelector((state) => state.cart.items);
+
+  const fetchCart = async () => {
+    const data = await getCart(currentUser._id);
+    setDataCart(data);
+    setAmountCart(data.items.length);
+  };
+
+  useEffect(() => {
+    fetchCart();
+  }, [amountCart]);
 
   const data = [];
   const cartItem =
@@ -132,7 +146,7 @@ function Header() {
                 to="/cart"
                 leftIcon={<i className="fa fa-shopping-bag " />}
                 badge
-                countBadge={carts[carts.length - 1].length}
+                countBadge={amountCart}
               ></Button>
             </span>
           </Menu>
