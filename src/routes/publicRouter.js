@@ -3,6 +3,7 @@ import Category from "../Pages/User/Category";
 import Loggin from "../Pages/User/Loggin";
 import Signup from "../Pages/User/Signup";
 import Payment from "../Pages/User/Payment";
+import Cart from "../Pages/User/Cart";
 
 export const publicRouter = [
   { path: "/", component: Home },
@@ -10,4 +11,5 @@ export const publicRouter = [
   { path: "/loggin", component: Loggin },
   { path: "/signup", component: Signup },
   { path: "/payment", component: Payment },
+  { path: "/cart", component: Cart },
 ];

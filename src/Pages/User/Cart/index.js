@@ -8,22 +8,31 @@ import { formatCurrent, handleLinkGGDrive } from "../../../Ultilities";
 import Image from "../../../Components/Image";
 import Button from "../../../Components/Button";
 import ChangeQuantity from "./ChangeQuantity";
+import { getCart } from "../../../ApiServices/cartApi";
 
 const cx = classNames.bind(style);
 
 function Cart() {
-  const carts = useSelector((state) => state.cart.items);
+  // const carts = useSelector((state) => state.cart.items);
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
 
   const [dataAllBook, setDataAllBook] = useState([]);
+  const [dataCart, setDataCart] = useState([]);
 
   const fetchAllBook = async () => {
     const data = await getAllBooks();
     setDataAllBook(data);
   };
 
+  const fetchCart = async () => {
+    const data = await getCart(currentUser._id);
+    console.log("data cart", data);
+    setDataCart(data.items);
+  };
+
   useEffect(() => {
     fetchAllBook();
+    fetchCart();
   }, []);
 
   return (
@@ -53,36 +62,42 @@ function Cart() {
           <p>Thành tiền</p>
         </span>
       </div>
-      {carts &&
-        carts.length > 0 &&
-        carts[carts.length - 1].map((item) => {
+      {dataCart &&
+        dataCart.length > 0 &&
+        dataCart.map((item) => {
           const book = dataAllBook.find((book) => book._id === item.itemId);
           return (
             <div className={cx("rowItem")} key={item._id}>
-              <div className="checkbox-wrapper-46">
-                <input className="inp-cbx" id="cbx-46" type="checkbox" />
-              </div>
               {book && (
-                <Image
-                  src={handleLinkGGDrive(book.thumnel)}
-                  alt={book.name}
-                  className={cx("cartitem__thumnel")}
-                />
+                <>
+                  <div className="checkbox-wrapper-46">
+                    <input className="inp-cbx" id="cbx-46" type="checkbox" />
+                  </div>
+
+                  <Image
+                    src={handleLinkGGDrive(book.thumnel)}
+                    alt={book.name}
+                    className={cx("cartitem__thumnel")}
+                  />
+
+                  <span className={cx("cartitem__name")}>
+                    <p>{book?.name || ""}</p>
+                  </span>
+                  <span className={cx("cartitem__price")}>
+                    <p>{formatCurrent(book?.price)}</p>
+                  </span>
+                  <ChangeQuantity
+                    defaultValue={item.quantity}
+                    item={item}
+                    currentUser={currentUser}
+                    price={book.price}
+                    setDataCart={setDataCart}
+                  />
+                  <span className={cx("cartitem__total")}>
+                    <p>{formatCurrent(book?.price * item?.quantity)}</p>
+                  </span>
+                </>
               )}
-              <span className={cx("cartitem__name")}>
-                <p>{book?.name || ""}</p>
-              </span>
-              <span className={cx("cartitem__price")}>
-                <p>{formatCurrent(book?.price)}</p>
-              </span>
-              <ChangeQuantity
-                defaultValue={item.quantity}
-                item={item}
-                currentUser={currentUser}
-              />
-              <span className={cx("cartitem__total")}>
-                <p>{formatCurrent(book?.price * item?.quantity)}</p>
-              </span>
             </div>
           );
         })}
