@@ -6,11 +6,12 @@ import style from "./SuggestList.module.scss";
 // import { useDispatch } from "react-redux";
 // import { addCart } from "../../../../store/apiRequest";
 import { addToCart } from "../../../../ApiServices/cartApi";
+import { useDispatch } from "react-redux";
 
 const cx = classNames.bind(style);
 
 function SuggestList({ dataBooks, dataAuthors, currentUser }) {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   return (
     <div className={cx("container")}>
       {dataBooks &&
@@ -26,9 +27,9 @@ function SuggestList({ dataBooks, dataAuthors, currentUser }) {
             const payload = {
               itemId: item._id,
               quantity: 1,
-              totalPrice: item.price,
+              price: item.price,
             };
-            const result = await addToCart(currentUser._id, payload);
+            const result = await addToCart(currentUser._id, payload, dispatch);
           };
           return (
             <CardBook
