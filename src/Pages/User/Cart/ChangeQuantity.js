@@ -2,21 +2,17 @@ import style from "./Cart.module.scss";
 
 import classNames from "classnames/bind";
 import { useState } from "react";
-import { changeQuantity } from "../../../ApiServices/cartApi";
-// import { changeQuantity } from "../../../store/apiRequest";
-// import { useDispatch } from "react-redux";
+import {
+  incrementQuantity,
+  decrementQuantity,
+} from "../../../ApiServices/cartApi";
+import { useDispatch } from "react-redux";
 
 const cx = classNames.bind(style);
 
-function ChangeQuantity({
-  defaultValue,
-  currentUser,
-  item,
-  price,
-  setDataCart,
-}) {
+function ChangeQuantity({ defaultValue, currentUser, item, setDataCart }) {
   const [quantity, setQuantity] = useState(defaultValue);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   return (
     <span className={cx("cartitem__quantity")}>
       <span
@@ -26,11 +22,13 @@ function ChangeQuantity({
             setQuantity(quantity - 1);
 
             const payload = {
-              id: item._id,
-              quantity: quantity - 1,
-              // totalPrice: item.totalPrice - price,
+              itemId: item.itemId,
             };
-            const newdata = await changeQuantity(currentUser._id, payload);
+            const newdata = await decrementQuantity(
+              currentUser._id,
+              payload,
+              dispatch
+            );
             setDataCart(newdata.items);
           }
         }}
@@ -44,10 +42,13 @@ function ChangeQuantity({
           setQuantity(quantity + 1);
 
           const payload = {
-            id: item._id,
-            quantity: quantity + 1,
+            itemId: item.itemId,
           };
-          const newdata = await changeQuantity(currentUser._id, payload);
+          const newdata = await incrementQuantity(
+            currentUser._id,
+            payload,
+            dispatch
+          );
           setDataCart(newdata.items);
         }}
       >

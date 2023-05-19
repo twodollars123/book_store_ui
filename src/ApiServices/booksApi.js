@@ -62,3 +62,16 @@ export const deleteABook = async (payload) => {
     console.log("delete a book falure", error);
   }
 };
+
+export const decrement = async (payload) => {
+  //payload {_id, quantity}
+  try {
+    const res = await axios.put(
+      `http://localhost:3001/book/decrementquantity`,
+      payload
+    );
+    return res.data;
+  } catch (error) {
+    console.log("decrement a book falure", error);
+  }
+};

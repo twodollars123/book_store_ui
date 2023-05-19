@@ -9,6 +9,7 @@ import Image from "../../../Components/Image";
 import Button from "../../../Components/Button";
 import ChangeQuantity from "./ChangeQuantity";
 import { getCart } from "../../../ApiServices/cartApi";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(style);
 
@@ -18,6 +19,7 @@ function Cart() {
 
   const [dataAllBook, setDataAllBook] = useState([]);
   const [dataCart, setDataCart] = useState([]);
+  const [selectedItem, setSelectedItem] = useState([]);
 
   const fetchAllBook = async () => {
     const data = await getAllBooks();
@@ -26,7 +28,6 @@ function Cart() {
 
   const fetchCart = async () => {
     const data = await getCart(currentUser._id);
-    console.log("data cart", data);
     setDataCart(data.items);
   };
 
@@ -35,6 +36,48 @@ function Cart() {
     fetchCart();
   }, []);
 
+  const handleChecked = (e) => {
+    const { name, checked } = e.target;
+    if (checked) {
+      setSelectedItem([...selectedItem, name]);
+    } else {
+      const newSelectedItem = selectedItem.filter((item) => item !== name);
+      setSelectedItem(newSelectedItem);
+    }
+  };
+
+  const selectAll = (e) => {
+    const { checked } = e.target;
+    if (checked) {
+      const allItems = dataCart.map((item) => item._id);
+      setSelectedItem(allItems);
+    } else {
+      setSelectedItem([]);
+    }
+  };
+  let total = 0;
+  dataCart &&
+    dataCart.length > 0 &&
+    dataCart.map((item) => {
+      if (selectedItem.includes(item._id)) {
+        total += item.price * item.quantity;
+      }
+    });
+
+  const dataSelectedItem =
+    dataCart &&
+    dataCart.length > 0 &&
+    dataCart.filter((item) => selectedItem.includes(item._id));
+
+  const navigate = useNavigate();
+  const navigateToPaymentPage = () => {
+    navigate("/payment", {
+      state: {
+        selectedItem: dataSelectedItem,
+      },
+    });
+  };
+
   return (
     <div className={cx("container")}>
       <span>
@@ -42,9 +85,6 @@ function Cart() {
       </span>
 
       <div className={cx("header")}>
-        <div className="checkbox-wrapper-46">
-          <input className="inp-cbx" id="cbx-46" type="checkbox" />
-        </div>
         <span style={{ display: "block", width: "100px" }}>
           <p></p>
         </span>
@@ -71,7 +111,14 @@ function Cart() {
               {book && (
                 <>
                   <div className="checkbox-wrapper-46">
-                    <input className="inp-cbx" id="cbx-46" type="checkbox" />
+                    <input
+                      className="inp-cbx"
+                      id="cbx-46"
+                      type="checkbox"
+                      name={item._id}
+                      onChange={handleChecked}
+                      checked={selectedItem.includes(item._id)}
+                    />
                   </div>
 
                   <Image
@@ -103,10 +150,25 @@ function Cart() {
         })}
 
       <div className={cx("payment", "rowItem")}>
+        <div className="checkbox-wrapper-46">
+          <input
+            className="inp-cbx"
+            id="selectall"
+            type="checkbox"
+            onChange={selectAll}
+            name="selectAll"
+            checked={selectedItem.length === dataCart.length}
+          />
+          <label htmlFor="selectall">Chọn tất cả</label>
+        </div>
         <span>
-          <p>Tổng thanh toán: </p>
+          <p style={{ color: "red" }}>
+            Tổng thanh toán: {formatCurrent(total)}
+          </p>
         </span>
-        <Button to="/payment">Thanh toán</Button>
+        {selectedItem && selectedItem.length > 0 && (
+          <Button onClick={navigateToPaymentPage}>Thanh toán</Button>
+        )}
       </div>
     </div>
   );

@@ -6,38 +6,52 @@ const cartSlice = createSlice({
     items: [],
   },
   reducers: {
-    addToCart: (state, action) => {
-      const itemInCart = state.cart.find(
-        (item) => item.id === action.payload.id
+    addToCartRedux: (state, action) => {
+      const itemInCart = state.items.find(
+        (item) => item.itemId === action.payload.itemId
       );
       if (itemInCart) {
         itemInCart.quantity++;
       } else {
-        state.cart.push({ ...action.payload, quantity: 1 });
+        state.items.push({ ...action.payload, quantity: 1 });
       }
     },
-    incrementQuantity: (state, action) => {
-      const item = state.cart.find((item) => item.id === action.payload);
+    incrementQuantityRedux: (state, action) => {
+      //payload : {itemId: }
+      const item = state.items.find(
+        (item) => item.itemId === action.payload.itemId
+      );
       item.quantity++;
     },
-    decrementQuantity: (state, action) => {
-      const item = state.cart.find((item) => item.id === action.payload);
+    decrementQuantityRedux: (state, action) => {
+      const item = state.items.find(
+        (item) => item.itemId === action.payload.itemId
+      );
       if (item.quantity === 1) {
-        item.quantity = 1;
+        const removeItem = state.items.filter(
+          (item) => item.itemId !== action.payload.itemId
+        );
+        state.items = removeItem;
       } else {
         item.quantity--;
       }
     },
-    removeItem: (state, action) => {
-      const removeItem = state.cart.filter(
-        (item) => item.id !== action.payload
+
+    removeItemRedux: (state, action) => {
+      console.log("action.payload.itemId", action.payload.itemId);
+      const removeItem = state.items.filter(
+        (item) => item.itemId !== action.payload.itemId
       );
-      state.cart = removeItem;
+      state.items = removeItem;
     },
   },
 });
 
-export const { addToCart, incrementQuantity, decrementQuantity, removeItem } =
-  cartSlice.actions;
+export const {
+  addToCartRedux,
+  incrementQuantityRedux,
+  decrementQuantityRedux,
+  removeItemRedux,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;
