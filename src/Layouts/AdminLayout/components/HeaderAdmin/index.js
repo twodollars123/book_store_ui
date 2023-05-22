@@ -152,7 +152,7 @@ function HeaderAdmin({ handleDrawerOpen, open }) {
           >
             <MenuIcon />
           </IconButton>
-          <Link href="/admin" underline="none">
+          <Link to="/admin" underline="none">
             <Typography
               variant="h6"
               noWrap
