@@ -204,6 +204,35 @@ function SidebarAdmin({ open, handleDrawerClose }) {
             </ListItemButton>
           </ListItem>
         </Link>
+        <Link
+          href="/admin/ordermanagement"
+          underline="none"
+          sx={{ color: "#000" }}
+        >
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <MailIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={"Order management"}
+                sx={{ opacity: open ? 1 : 0 }}
+              />
+            </ListItemButton>
+          </ListItem>
+        </Link>
       </List>
       <Divider />
       <List>

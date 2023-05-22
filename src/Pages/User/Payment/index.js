@@ -9,11 +9,7 @@ import ModalSelectAddress from "./ModalSelectAddress";
 import { useLocation, useNavigate } from "react-router-dom";
 import { formatCurrent, handleLinkGGDrive } from "../../../Ultilities";
 import Image from "../../../Components/Image";
-import {
-  decrement,
-  getAllBooks,
-  updateABook,
-} from "../../../ApiServices/booksApi";
+import { decrement, getAllBooks } from "../../../ApiServices/booksApi";
 import { createNewOrder } from "../../../ApiServices/orderApi";
 import { toast } from "react-toastify";
 import { removeCart } from "../../../ApiServices/cartApi";
@@ -72,7 +68,6 @@ function Payment() {
     };
 
     const result = await createNewOrder(payload);
-    console.log("réult", result);
     if (result) {
       await Promise.all(
         dataSelectedItem.map(async (item) => {

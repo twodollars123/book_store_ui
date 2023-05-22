@@ -37,3 +37,10 @@ export const createAddress = async (payload) => {
     return res.data;
   } catch (error) {}
 };
+
+export const getAllAddress = async () => {
+  try {
+    const res = await axios.get(`http://localhost:3001/deliveryaddress/`);
+    return res.data;
+  } catch (error) {}
+};
