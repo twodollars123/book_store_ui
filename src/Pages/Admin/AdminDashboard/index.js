@@ -7,18 +7,27 @@ import { BarChart } from "./Bar";
 import { PieChart } from "./Pie";
 import { getAllOrder } from "../../../ApiServices/orderApi";
 import { useEffect, useState } from "react";
+import { getAllBooks } from "../../../ApiServices/booksApi";
 
 const cx = classNames.bind(style);
 
 function AdminDashboard() {
   const [dataOrders, setDataOrders] = useState([]);
+  const [dataAllBooks, setDataAllBooks] = useState([]);
+
   const fetchAllOrder = async () => {
     const res = await getAllOrder();
     setDataOrders(res);
   };
 
+  const fetchAllBooks = async () => {
+    const result = await getAllBooks();
+    setDataAllBooks(result);
+  };
+
   useEffect(() => {
     fetchAllOrder();
+    fetchAllBooks();
   }, []);
   return (
     <div className={cx("container")}>
@@ -29,11 +38,11 @@ function AdminDashboard() {
         </div>
         <div className={cx("dashboard__wraper")}>
           <div className={cx("linechart")}>
-            <LineChart />
+            <LineChart dataOrders={dataOrders} />
           </div>
           {/* <div className={cx("dashboard__wraper")}> */}
           <div className={cx("piechart")}>
-            <PieChart />
+            <PieChart dataOrders={dataOrders} dataAllBooks={dataAllBooks} />
           </div>
           {/* </div> */}
         </div>

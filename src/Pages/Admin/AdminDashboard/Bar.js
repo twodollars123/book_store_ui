@@ -28,10 +28,11 @@ export const options = {
   plugins: {
     legend: {
       position: "top",
+      display: false,
     },
     title: {
       display: true,
-      // text: "View of daily",
+      text: "Doanh thu hàng tháng",
     },
   },
 };
