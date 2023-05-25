@@ -9,7 +9,11 @@ import ModalSelectAddress from "./ModalSelectAddress";
 import { useLocation, useNavigate } from "react-router-dom";
 import { formatCurrent, handleLinkGGDrive } from "../../../Ultilities";
 import Image from "../../../Components/Image";
-import { decrement, getAllBooks } from "../../../ApiServices/booksApi";
+import {
+  decrement,
+  getAllBooks,
+  updatePriorityPoints,
+} from "../../../ApiServices/booksApi";
 import { createNewOrder } from "../../../ApiServices/orderApi";
 import { toast } from "react-toastify";
 import { removeCart } from "../../../ApiServices/cartApi";
@@ -55,9 +59,10 @@ function Payment() {
   //lấy dữ liệu từ cartpage
   const location = useLocation();
   const dataSelectedItem = location.state.selectedItem;
-  //log
   let totalAmount = 0;
   dataSelectedItem.map((item) => (totalAmount += item.quantity * item.price));
+  //log
+  console.log("a", dataSelectedItem);
 
   const handleOrder = async () => {
     const payload = {
@@ -68,6 +73,7 @@ function Payment() {
     };
 
     const result = await createNewOrder(payload);
+
     if (result) {
       await Promise.all(
         dataSelectedItem.map(async (item) => {
@@ -76,6 +82,19 @@ function Payment() {
           await decrement({ _id: item.itemId, quantity: item.quantity });
         })
       );
+
+      const payloads = dataSelectedItem.map((item) => {
+        const filter = dataAllBook.filter((ele) => ele._id === item.itemId);
+        return {
+          type: "order",
+          authorId: filter[0].author,
+          genreId: filter[0].genres,
+          bookId: filter[0]._id,
+        };
+      });
+      payloads.map(async (payload) => {
+        await updatePriorityPoints(payload);
+      });
 
       navigate("/");
       toast.success("Order successfully!", {

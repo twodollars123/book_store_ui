@@ -55,13 +55,16 @@ export function PieChart({ dataOrders, dataAllBooks }) {
   }
   const labels = [];
   if (dataAllBooks && dataAllBooks.length > 0) {
-    const filterBook = dataAllBooks.filter((item) =>
-      aggregation.map((item) => item.itemId).includes(item._id)
-    );
+    // const filterBook = dataAllBooks.filter((item) =>
+    //   aggregation.map((item) => item.itemId).includes(item._id)
+    // );
+    const filterBook = aggregation.map((item) => {
+      return dataAllBooks.filter((ele) => ele._id === item.itemId)[0].name;
+    });
     labels.push(...filterBook);
   }
   const data = {
-    labels: labels.map((item) => item.name),
+    labels: labels,
     datasets: [
       {
         data: aggregation.map((item) => {

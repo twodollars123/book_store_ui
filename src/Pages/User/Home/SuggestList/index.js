@@ -7,6 +7,7 @@ import style from "./SuggestList.module.scss";
 // import { addCart } from "../../../../store/apiRequest";
 import { addToCart } from "../../../../ApiServices/cartApi";
 import { useDispatch } from "react-redux";
+import { updatePriorityPoints } from "../../../../ApiServices/booksApi";
 
 const cx = classNames.bind(style);
 
@@ -30,6 +31,12 @@ function SuggestList({ dataBooks, dataAuthors, currentUser }) {
               price: item.price,
             };
             const result = await addToCart(currentUser._id, payload, dispatch);
+            await updatePriorityPoints({
+              type: "addtocart",
+              authorId: item.author,
+              genreId: item.genres,
+              bookId: item._id,
+            });
           };
           return (
             <CardBook

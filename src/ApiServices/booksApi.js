@@ -101,3 +101,16 @@ export const updatePurchasedQuantity = async (payload) => {
     console.log("increment inventory a book falure", error);
   }
 };
+
+export const updatePriorityPoints = async (payload) => {
+  //payload{type: "addtocart" || "order", authorId, genreId, bookId}
+  try {
+    const res = await axios.put(
+      `http://localhost:3001/book/updateprioritypoints`,
+      payload
+    );
+    return res.data;
+  } catch (error) {
+    console.log("updatePriorityPoints a book falure", error);
+  }
+};

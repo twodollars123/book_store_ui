@@ -22,7 +22,6 @@ function Header() {
 
   const currentUser = useSelector((state) => state.auth.login?.currentUser);
   const carts = useSelector((state) => state.cart.items);
-  console.log("cart", carts);
 
   const fetchCart = async () => {
     const data = await getCart(currentUser._id);
@@ -88,7 +87,6 @@ function Header() {
   const renderHeaderActionSignedUp = () => {
     //biến đk xác định có là admin hay k
     const isAdmin = !!currentUser.isadmin;
-    console.log("is admin", isAdmin);
     return isAdmin ? (
       <Menu
         items={[...DATA_MENU_ITEMS_USER, ...DATA_MENU_ITEMS_ADMIN]}
