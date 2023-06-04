@@ -12,6 +12,7 @@
   --height-search: 30px;
 
   --width-search: 360px;
+  --height-header: 46px;
 }
 
 * {
@@ -60,4 +61,8 @@ a,
 link {
   color: var(--text-color);
   text-decoration: none;
+  font-size: 1.1rem;
+  &:hover {
+    color: var(--text-color);
+  }
 }

@@ -12,7 +12,7 @@ export const getAllGenres = async () => {
 
 export const getAGenre = async (id) => {
   try {
-    const res = await axios.get(`http://localhost:3001/genre/:${id}`);
+    const res = await axios.get(`http://localhost:3001/genre/${id}`);
     return res.data;
   } catch (error) {
     console.log("get a genre", error);

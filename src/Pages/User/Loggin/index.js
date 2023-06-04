@@ -58,6 +58,7 @@ function Loggin() {
             type="text"
             placeholder="Tên đăng nhập"
             onChange={(e) => setUsername(e.target.value)}
+            id="user__name"
           />
           <small></small>
           <span></span>
@@ -68,12 +69,13 @@ function Loggin() {
             type="password"
             placeholder="Mật khẩu"
             onChange={(e) => setPassword(e.target.value)}
+            id="password"
           />
           <small></small>
           <span></span>
         </div>
 
-        <button type="submit" className="btn_submit">
+        <button type="submit" className="btn_submit" id="btn__login">
           Đăng nhập
         </button>
 

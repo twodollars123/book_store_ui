@@ -114,3 +114,25 @@ export const updatePriorityPoints = async (payload) => {
     console.log("updatePriorityPoints a book falure", error);
   }
 };
+
+export const getSuggestList = async (payload) => {
+  //payload{perPage, page}
+  try {
+    const res = await axios.post(
+      `http://localhost:3001/book/listfavourite`,
+      payload
+    );
+    return res.data;
+  } catch (error) {
+    console.log("updatePriorityPoints a book falure", error);
+  }
+};
+
+export const getBestSellerList = async () => {
+  try {
+    const res = await axios.get(`http://localhost:3001/book/bestseller`);
+    return res.data;
+  } catch (error) {
+    console.log("updatePriorityPoints a book falure", error);
+  }
+};

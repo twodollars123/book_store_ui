@@ -11,7 +11,7 @@ export const createAAuthor = async (payload) => {
 
 export const getAAuthor = async (id) => {
   try {
-    const res = await axios.get(`http://localhost:3001/author/:${id}`, id);
+    const res = await axios.get(`http://localhost:3001/author/${id}`);
     return res.data;
   } catch (error) {
     console.log("get a author err", error);

@@ -33,7 +33,7 @@ export function PieChart({ dataOrders, dataAllBooks }) {
       const condition =
         ele.state === "confirm" &&
         year === currentYear &&
-        month === currentMonth; // sau phải sửa thành curentMonth -1;
+        month === currentMonth - 1; // sau phải sửa thành curentMonth -1;
       if (condition) {
         filterData.push(...ele.items);
       }
